@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState} from "react";
+import { Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
@@ -10,6 +11,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import { useLocation } from 'react-router-dom'
 
 const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,
@@ -18,7 +20,10 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
-export const HomePage = () => {
+export const HomePage = (props) => {
+    const location = useLocation()
+    console.log(location,'dmgkfjgklfjgklf')
+
     const [aiModel, setAiModel] = useState('');
     const [postProcessing, setPostProssesing] = useState('')
     const [area, setArea] = useState('')
@@ -35,17 +40,17 @@ export const HomePage = () => {
         setPostProssesing('');
         setAiModel('');
       };
-    console.log(aiModel)
     return (
         <Grid container spacing={8} padding={10} marginLeft={7}>
             
             <Grid item xs={6} md={3}>
                 <Item style ={{marginBottom:10}}>1. Data Source</Item>
+                <Link to='/add-area'>
                 <Button variant="outlined"
-                startIcon={<AddCircleIcon/>} 
-                as='a' href='/map-view'>
+                startIcon={<AddCircleIcon/>} >
                 Add Area
                 </Button>
+                </Link>
             </Grid>
             <Grid item xs={6} md={3}>
                 <Item>2. AI Model</Item>

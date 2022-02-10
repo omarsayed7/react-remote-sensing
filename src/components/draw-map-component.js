@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';
 import html2canvas from 'html2canvas';
 import * as htmlToImage from 'html-to-image';
 import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
+import { ContactPageSharp } from '@mui/icons-material';
 // work around broken icons when using webpack, see https://github.com/PaulLeCam/react-leaflet/issues/255
 
 delete L.Icon.Default.prototype._getIconUrl;
@@ -20,39 +21,13 @@ L.Icon.Default.mergeOptions({
 
 //
 
-export default class DrawMap extends Component {
+export class DrawMapComponent extends Component {
     // see http://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html#l-draw-event for leaflet-draw events doc
 
     constructor(props) {
         super(props);
         this.myRef = React.createRef();
     }
-    _handleDownloadImage = async () => {
-        // var path = document.getElementsByClassName("leaflet-draw-section").item(0);
-
-        // newpath = document.createElementNS(document.rootElement.namespaceURI,"path");  
-        // newpath.setAttributeNS(null, "id", "pathIdD");  
-        // newpath.setAttributeNS(null, "d", path);  
-        // newpath.setAttributeNS(null, "stroke", "black"); 
-        // newpath.setAttributeNS(null, "stroke-width", 3);  
-        // newpath.setAttributeNS(null, "opacity", 1);  
-        // newpath.setAttributeNS(null, "fill", "none");
-
-        // document.rootElement.appendChild(newpath);
-
-        // console.log("ELEMENT", element)
-        // document.body.appendChild(element);
-        // html2canvas(element).then(function (canvas) {
-        //     var link = document.createElement("a");
-        //     document.body.appendChild(link);
-        //     link.download = "html_image.png";
-        //     link.href = canvas.toDataURL("image/png");
-        //     link.target = '_blank';
-        //     link.click();
-        //     console.log(link)
-        // });
-    };
-
     _onEdited = (e) => {
         let numEdited = 0;
         e.layers.eachLayer((layer) => {
@@ -61,19 +36,17 @@ export default class DrawMap extends Component {
         console.log(`_onEdited: edited ${numEdited} layers`, e);
 
         this._onChange();
+        
     };
 
     _onCreated = (e) => {
         let type = e.layerType;
         let layer = e.layer;
+        console.log(layer._latlngs[0])
         let minPoint = layer._latlngs[0][0]
         let maxPoint = layer._latlngs[0][2]
-        console.log (minPoint, maxPoint)
         let outputBbox = [minPoint.lng, minPoint.lat,maxPoint.lng,maxPoint.lat]
-        console.log(outputBbox)
-        console.log(layer)
-        var seeArea = L.GeometryUtil.geodesicArea(layer.getLatLngs());
-        console.log(seeArea)
+        this.props.handleBbox(outputBbox)
         if (type === 'marker') {
             // Do marker specific actions
             console.log('_onCreated: marker created', e);
@@ -81,10 +54,8 @@ export default class DrawMap extends Component {
             console.log('_onCreated: something else created:', type, e);
         }
         // Do whatever else you need to. (save to db; etc)
-
-        this._onChange();
-
-        this._handleDownloadImage();
+        var seeArea = L.GeometryUtil.geodesicArea(e.layer.getLatLngs());
+        console.log("AREAAA", seeArea)
     };
 
     _onDeleted = (e) => {
@@ -119,7 +90,7 @@ export default class DrawMap extends Component {
 
     render() {
         return (
-            <MapContainer center={[37.8189, -122.4786]} zoom={13} zoomControl={false} style={{ height: "100vh" }} >
+            <MapContainer center={[37.8189, -122.4786]} zoom={13} zoomControl={false} style={{ height: "90vh" }} >
                 <TileLayer
                     // attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     // url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
@@ -165,6 +136,7 @@ export default class DrawMap extends Component {
 
         leafletGeoJSON.eachLayer((layer) => {
             leafletFG.addLayer(layer);
+            
         });
 
         // store the ref for future access to content
