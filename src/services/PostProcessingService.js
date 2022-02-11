@@ -1,12 +1,19 @@
 import API from "./APIs";
-import { makeRequest } from "../util";
+import axios from "axios";
 
 export async function fetchSegmentationMask() {
-    const res = await makeRequest(`${API.SEGMENTATION_API_URL}/`, {
-        method: "GET",
-        headers: {
-            "Content-type": "application/json",
+    let URL = `${API.SEGMENTATION_API_URL}`;
+    console.log(URL)
+    return await axios({
+        method: "get",
+        url: URL,
+        config: {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "content-Type": "image/jpeg",
+            },
         },
+    }).catch(function (err) {
+        return err;
     });
-    return res;
 }
