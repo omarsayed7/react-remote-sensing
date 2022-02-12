@@ -1,4 +1,4 @@
-const baseUrl = "https://f173-156-204-58-9.ngrok.io";
+const baseUrl = "https://94c2-197-46-92-48.ngrok.io";
 
 export default {
     SEGMENTATION_API_URL: `${baseUrl}/api/segmentation-model`,

@@ -23,21 +23,24 @@ export class MapOverlayPage extends Component {
         super(props);
         this.myRef = React.createRef();
         this.state = {
-            maskImage: ''
+            maskImage: '',
+            bounds: [[37.802273929613634, -122.456784725091],
+            [37.803570589851, -122.45458745943327]]
         }
     }
     async componentDidMount() {
         const segmentationMask = await fetchSegmentationMask();
-        // convert to Base64
-        var b64Response = segmentationMask
+        console.log("HERE:", segmentationMask)
+        const maskURL = segmentationMask.request.responseURL
+        console.log("HERE222:", maskURL)
         // create an image
-        // var outputImg = document.createElement('img');
-        // outputImg.src = 'data:image/png;base64,' + b64Response;
-        download(b64Response, "test.jpg", "image/jpeg")
-        // this.setState({ maskImage: segmentationMask.data })
+        this.setState({ maskImage: maskURL })
     }
+
     render() {
-        console.log(this.state.maskImage)
+        const bBox = localStorage.getItem('Bbox').split("[")[1].split(']')[0].split(',')
+        const BboxBounds = [[parseFloat(bBox[1]), parseFloat(bBox[0])], [parseFloat(bBox[3]), parseFloat(bBox[2])]]
+        console.log(this.state, BboxBounds, "STATE")
         return (
             <MapContainer center={[37.8189, -122.4786]} zoom={13} zoomControl={false} style={{ height: "90vh" }} >
                 <TileLayer
@@ -46,31 +49,11 @@ export class MapOverlayPage extends Component {
                     url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
                     attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
                 />
-                <ImageOverlay bounds={[
-
-                    [37.804205972185315, -122.46813154233679],
-                    [37.80581300358448, -122.4655394551519],
-                ]
-                }
+                <ImageOverlay
+                    bounds={BboxBounds}
                     url={this.state.maskImage}
                     opacity={0.5}
                 />
-                {/* <FeatureGroup
-                // ref={(reactFGref) => {
-                //     this._onFeatureGroupReady(reactFGref);
-                // }}
-                >
-                    <EditControl
-                        draw={{
-                            rectangle: false,
-                            circle: false,
-                            polygon: false,
-                            polyline: false,
-                            circlemarker: false,
-                            marker: false,
-                        }}
-                    />
-                </FeatureGroup> */}
             </MapContainer>
         );
     }
