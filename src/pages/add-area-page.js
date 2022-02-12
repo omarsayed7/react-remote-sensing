@@ -10,6 +10,7 @@ export const AddAreaPage = () => {
     const handleBbox = (event) => {
         console.log("handlebbox", event)
         setbbox(event);
+        console.log(typeof (event), "testttt")
         localStorage.setItem("Bbox", JSON.stringify(event));
     };
     return (

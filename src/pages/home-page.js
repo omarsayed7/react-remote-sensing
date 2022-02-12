@@ -20,10 +20,7 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 export const HomePage = (props) => {
-    let tt = localStorage.getItem("Bbox")
-    const [bbox, setbbox] = useState('');
-    const [width, setwidth] = useState('');
-    const [height, setheight] = useState('');
+    let bbox = localStorage.getItem('Bbox')
     const [aiModel, setAiModel] = useState('');
     const [postProcessing, setPostProssesing] = useState('')
     const handleChangeAiModel = (event) => {
@@ -38,17 +35,17 @@ export const HomePage = (props) => {
     };
     const onSegmentation = async () => {
         const segModel = {
-            "Bbox": [50, 50, 50, 50],
+            "Bbox": bbox,
             "Width": 400,
-            "Height": 500,
+            "Height": 400,
             "Algorithm": aiModel,
             "PostProcessing": postProcessing
         }
+        console.log("MODEL", segModel)
         const segmentationResponse = await segmentation(segModel);
     }
     return (
-        <Grid container spacing={8} padding={10} marginLeft={7}>
-
+        <Grid container spacing={8} padding={10}>
             <Grid item xs={6} md={3}>
                 <Item style={{ marginBottom: 10 }}>1. Data Source</Item>
                 <Link to='/add-area'>
@@ -95,13 +92,7 @@ export const HomePage = (props) => {
                         Mask overlay
                     </Button>
                 </Link>
-                {/* {aiModel != '' && postProcessing != '' && !!bbox ?
-                    <Button variant="outlined"
-                        onClick={onSegmentation}>
-                        Run processing
-                    </Button>
-                    : null} */}
-                {aiModel != '' && postProcessing != '' ?
+                {aiModel != '' && postProcessing != '' && !!bbox ?
                     <Button variant="outlined"
                         onClick={onSegmentation}>
                         Run processing
