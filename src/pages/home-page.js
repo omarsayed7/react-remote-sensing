@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useParams } from "react";
 import { Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
@@ -19,15 +19,13 @@ const Item = styled(Paper)(({ theme }) => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
 }));
-
 export const HomePage = (props) => {
-    const location = useLocation()
-    const bbox = location.state.Bbbox
-    const width = location.state.Width
-    const height = location.state.Height
+    let tt = localStorage.getItem("Bbox")
+    const [bbox, setbbox] = useState('');
+    const [width, setwidth] = useState('');
+    const [height, setheight] = useState('');
     const [aiModel, setAiModel] = useState('');
     const [postProcessing, setPostProssesing] = useState('')
-
     const handleChangeAiModel = (event) => {
         setAiModel(event.target.value);
     };
@@ -40,7 +38,7 @@ export const HomePage = (props) => {
     };
     const onSegmentation = async () => {
         const segModel = {
-            "Bbox": bbox,
+            "Bbox": [50, 50, 50, 50],
             "Width": 400,
             "Height": 500,
             "Algorithm": aiModel,
@@ -97,7 +95,13 @@ export const HomePage = (props) => {
                         Mask overlay
                     </Button>
                 </Link>
-                {aiModel != '' && postProcessing != '' && !!bbox ?
+                {/* {aiModel != '' && postProcessing != '' && !!bbox ?
+                    <Button variant="outlined"
+                        onClick={onSegmentation}>
+                        Run processing
+                    </Button>
+                    : null} */}
+                {aiModel != '' && postProcessing != '' ?
                     <Button variant="outlined"
                         onClick={onSegmentation}>
                         Run processing
