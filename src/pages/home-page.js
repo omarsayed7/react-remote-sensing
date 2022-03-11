@@ -57,9 +57,8 @@ export const HomePage = (props) => {
 
         // Update the formData object
         formData.append(
-            "myFile",
-            selectedFile,
-            selectedFile.name
+            "file",
+            selectedFile
         );
 
         console.log(selectedFile);
@@ -77,7 +76,7 @@ export const HomePage = (props) => {
                     </Button>
                 </Link>
                 <label htmlFor="contained-button-file">
-                    <input accept="image/*" id="contained-button-file" hidden type="file" onChange={onUploadFile} />
+                    <input accept="image/*" id="contained-button-file" type="file" onChange={onUploadFile} />
                     <Button variant="contained" component="span" onClick={onFileUpload}>
                         Upload
                     </Button>
