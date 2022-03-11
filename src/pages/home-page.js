@@ -11,7 +11,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { useLocation } from 'react-router-dom'
 
-import { segmentation } from '../services'
+import { segmentation, Upload } from '../services'
 
 const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,
@@ -23,6 +23,7 @@ export const HomePage = (props) => {
     let bbox = localStorage.getItem('Bbox')
     const [aiModel, setAiModel] = useState('');
     const [postProcessing, setPostProssesing] = useState('')
+    const [selectedFile, setSelectedFile] = useState(null)
     const handleChangeAiModel = (event) => {
         setAiModel(event.target.value);
     };
@@ -44,9 +45,30 @@ export const HomePage = (props) => {
         console.log("MODEL", segModel)
         const segmentationResponse = await segmentation(segModel);
     }
+    const onUploadFile = (event) => {
+        console.log(event)
+        setSelectedFile(event.target.files[0])
+        console.log(selectedFile);
+    }
+    const onFileUpload = async () => {
+
+        // Create an object of formData
+        const formData = new FormData();
+
+        // Update the formData object
+        formData.append(
+            "myFile",
+            selectedFile,
+            selectedFile.name
+        );
+
+        console.log(selectedFile);
+
+        const uploadedFile = await Upload(formData)
+    };
     return (
         <Grid container spacing={8} padding={10}>
-            <Grid item xs={6} md={3}>
+            <Grid item xs={6} md={3} sx={{ flex: 1, flexDirection: "column", display: "flex" }}>
                 <Item style={{ marginBottom: 10 }}>1. Data Source</Item>
                 <Link to='/add-area'>
                     <Button variant="outlined"
@@ -54,6 +76,12 @@ export const HomePage = (props) => {
                         Add Area
                     </Button>
                 </Link>
+                <label htmlFor="contained-button-file">
+                    <input accept="image/*" id="contained-button-file" hidden type="file" onChange={onUploadFile} />
+                    <Button variant="contained" component="span" onClick={onFileUpload}>
+                        Upload
+                    </Button>
+                </label>
             </Grid>
             <Grid item xs={6} md={3}>
                 <Item>2. AI Model</Item>
