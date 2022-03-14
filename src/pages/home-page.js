@@ -9,7 +9,7 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { useLocation } from 'react-router-dom'
+import ReactTooltip from "react-tooltip";
 
 import { segmentation, Upload, upload_Segmentation, fetchSegmentationBoundingMask } from '../services'
 
@@ -36,7 +36,6 @@ export const HomePage = (props) => {
         setAiModel('');
     };
     const onSegmentation = async () => {
-        console.log(selectedType, "425283838")
         const segModel = {
             "Bbox": bbox,
             "Width": 400,
@@ -54,9 +53,9 @@ export const HomePage = (props) => {
         else if (selectedType == "upload") {
             const uploadSegmentationResponse = await upload_Segmentation(segModel);
             console.log(uploadSegmentationResponse, "uploadSegmentationResponse")
-            const boundingBox = await fetchSegmentationBoundingMask();
+            localStorage.setItem("Bbox", JSON.stringify(uploadSegmentationResponse[1]["bbox"]))
+            // const boundingBox = await fetchSegmentationBoundingMask();
             console.log(boundingBox, "boundingBox");
-            localStorage.setItem("Bbox", JSON.stringify(boundingBox[1]["bbox"]))
         }
         else {
             console.log("Please select Data source")
@@ -88,7 +87,8 @@ export const HomePage = (props) => {
     return (
         <Grid container spacing={8} padding={10}>
             <Grid item xs={6} md={3} sx={{ flex: 1, flexDirection: "column", display: "flex" }}>
-                <Item style={{ marginBottom: 10 }}>1. Data Source</Item>
+                <Item data-tip data-for="DataSource" style={{ marginBottom: 10 }}>1. Data Source</Item>
+                <ReactTooltip id="DataSource" place="top" effect="solid">Textttt</ReactTooltip>
                 <Link to='/add-area'>
                     <Button variant="outlined"
                         startIcon={<AddCircleIcon />} >
@@ -103,7 +103,8 @@ export const HomePage = (props) => {
                 </div>
             </Grid>
             <Grid item xs={6} md={3}>
-                <Item>2. AI Model</Item>
+                <Item data-tip data-for="AIModel" >2. AI Model</Item>
+                <ReactTooltip id="AIModel" place="top" effect="solid">Textttt</ReactTooltip>
                 <RadioGroup
                     aria-labelledby="demo-controlled-radio-buttons-group"
                     name="controlled-radio-buttons-group"
@@ -119,7 +120,8 @@ export const HomePage = (props) => {
                 </RadioGroup>
             </Grid>
             <Grid item xs={6} md={3}>
-                <Item>3. Post-processing</Item>
+                <Item data-tip data-for="PostProcessing" >3. Post-processing</Item>
+                <ReactTooltip id="PostProcessing" place="top" effect="solid">Textttt</ReactTooltip>
                 <RadioGroup
                     aria-labelledby="demo-controlled-radio-buttons-group"
                     name="controlled-radio-buttons-group"
@@ -133,7 +135,8 @@ export const HomePage = (props) => {
                 </RadioGroup>
             </Grid>
             <Grid item xs={6} md={3}>
-                <Item style={{ marginBottom: 10 }}>4. Run Project</Item>
+                <Item data-tip data-for="RunProject" style={{ marginBottom: 10 }}>4. Run Project</Item>
+                <ReactTooltip id="RunProject" place="top" effect="solid">Textttt</ReactTooltip>
                 <Link to='/map-overlay'>
                     <Button variant="outlined">
                         Mask overlay
