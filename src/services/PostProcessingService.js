@@ -19,4 +19,21 @@ export async function fetchSegmentationMask() {
     })
 }
 
+export async function fetchSegmentationBoundingMask() {
+    let URL = `${API.UPLOAD_FILE}`;
+    console.log(URL)
+    return await axios({
+        method: "get",
+        url: URL,
+        config: {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "content-Type": "application/json",
+            },
+        },
+    }).catch(function (err) {
+        return err;
+    })
+}
+
 // .then(response => Buffer.from(response.data, 'binary').toString('base64'));
