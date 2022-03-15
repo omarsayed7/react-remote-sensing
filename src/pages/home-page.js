@@ -55,7 +55,6 @@ export const HomePage = (props) => {
             console.log(uploadSegmentationResponse, "uploadSegmentationResponse")
             localStorage.setItem("Bbox", JSON.stringify(uploadSegmentationResponse[1]["bbox"]))
             // const boundingBox = await fetchSegmentationBoundingMask();
-            console.log(boundingBox, "boundingBox");
         }
         else {
             console.log("Please select Data source")
@@ -96,10 +95,14 @@ export const HomePage = (props) => {
                     </Button>
                 </Link>
                 <div>
-                    <input accept="image/*" id="contained-button-file" type="file" onChange={onUploadFile} />
+                    <input style={{ marginTop: 10 }} accept="image/*" id="contained-button-file" type="file" onChange={onUploadFile} />
                     <Button onClick={onFileUpload}>
                         Upload
                     </Button>
+                </div>
+                <div>
+                    <p style={{ marginBottom: -5 }}> To download more TIF files</p>
+                    <a href="https://earthexplorer.usgs.gov/" target="_blank">Click here</a>
                 </div>
             </Grid>
             <Grid item xs={6} md={3}>
@@ -129,7 +132,7 @@ export const HomePage = (props) => {
                     onChange={handleChangePostProcessing}
                     style={{ marginTop: 8 }}
                 >
-                    <FormControlLabel value="Download" control={<Radio />} label="Download Mask" />
+                    <FormControlLabel value="Download" control={<Radio />} label="Download Thematic layer" />
                     <FormControlLabel value="ShowOnMap" control={<Radio />} label="Show on map" />
 
                 </RadioGroup>
@@ -139,7 +142,7 @@ export const HomePage = (props) => {
                 <ReactTooltip id="RunProject" place="top" effect="solid">Textttt</ReactTooltip>
                 <Link to='/map-overlay'>
                     <Button variant="outlined">
-                        Mask overlay
+                        Thematic overlay
                     </Button>
                 </Link>
                 {aiModel != '' && postProcessing != '' && !!bbox ?
