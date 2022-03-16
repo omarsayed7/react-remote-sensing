@@ -10,7 +10,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import ReactTooltip from "react-tooltip";
-
+import { MdInfo } from "@react-icons/all-files/md/MdInfo"
 import { segmentation, Upload, upload_Segmentation, fetchSegmentationBoundingMask } from '../services'
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -81,17 +81,21 @@ export const HomePage = (props) => {
         console.log(formData)
 
         const uploadedFile = await Upload(formData)
-        var x =JSON.stringify(uploadedFile[1]["bbox"]);
-        console.log("["+(x.replaceAll('[',"").replaceAll(']',"").replaceAll('\"',""))+"]")
-        var boundings = "["+(x.replaceAll('[',"").replaceAll(']',"").replaceAll('\"',""))+"]";
-        console.log(localStorage.getItem("Bbox"),"Bboxx")
+        var x = JSON.stringify(uploadedFile[1]["bbox"]);
+        console.log("[" + (x.replaceAll('[', "").replaceAll(']', "").replaceAll('\"', "")) + "]")
+        var boundings = "[" + (x.replaceAll('[', "").replaceAll(']', "").replaceAll('\"', "")) + "]";
+        console.log(localStorage.getItem("Bbox"), "Bboxx")
         // console.log(JSON.stringify(uploadedFile[1]["bbox"]),"uploadedFileResponse")
         localStorage.setItem("Bbox", boundings)
     };
     return (
         <Grid container spacing={8} padding={10}>
             <Grid item xs={6} md={3} sx={{ flex: 1, flexDirection: "column", display: "flex" }}>
-                <Item data-tip data-for="DataSource" style={{ marginBottom: 10 }}>1. Data Source</Item>
+                <Item style={{ marginBottom: 10, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+                    <p>1. Data Source</p>
+                    <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="DataSource" />
+                </Item>
+                {/* <MdInfo data-tip data-for="DataSource" /> */}
                 <ReactTooltip id="DataSource" place="top" effect="solid">Textttt</ReactTooltip>
                 <Link to='/add-area'>
                     <Button variant="outlined"
@@ -107,11 +111,19 @@ export const HomePage = (props) => {
                 </div>
                 <div>
                     <p style={{ marginBottom: -5 }}> To download more TIF files</p>
-                    <a href="https://earthexplorer.usgs.gov/" target="_blank">Click here</a>
+                    <div style={{ display: "flex", flexDirection: "row", alignContent: "center" }}>
+                        <a href="https://earthexplorer.usgs.gov/" target="_blank">Click here</a>
+                        <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="TIFFiles" />
+                        <ReactTooltip id="TIFFiles" place="top" effect="solid">Texttt12t</ReactTooltip>
+                    </div>
                 </div>
             </Grid>
             <Grid item xs={6} md={3}>
-                <Item data-tip data-for="AIModel" >2. AI Model</Item>
+                <Item style={{ marginBottom: 10, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+                    <p>2. AI Model</p>
+                    <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="AIModel" />
+                </Item>
+                {/* <Item  > <MdInfo style={{ marginBottom: -5 }} size={20} data-tip data-for="AIModel" /></Item> */}
                 <ReactTooltip id="AIModel" place="top" effect="solid">Textttt</ReactTooltip>
                 <RadioGroup
                     aria-labelledby="demo-controlled-radio-buttons-group"
@@ -128,8 +140,12 @@ export const HomePage = (props) => {
                 </RadioGroup>
             </Grid>
             <Grid item xs={6} md={3}>
-                <Item data-tip data-for="PostProcessing" >3. Post-processing</Item>
-                <ReactTooltip id="PostProcessing" place="top" effect="solid">Textttt</ReactTooltip>
+                <Item style={{ marginBottom: 10, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+                    <p>3. Post-processing</p>
+                    <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="PostProcessing" />
+                </Item>
+                {/* <Item  > <MdInfo style={{ marginBottom: -5 }} size={20} data-tip data-for="PostProcessing" /></Item> */}
+                <ReactTooltip id="PostProcessing" place="top" effect="solid">Texttt12t</ReactTooltip>
                 <RadioGroup
                     aria-labelledby="demo-controlled-radio-buttons-group"
                     name="controlled-radio-buttons-group"
@@ -143,7 +159,11 @@ export const HomePage = (props) => {
                 </RadioGroup>
             </Grid>
             <Grid item xs={6} md={3}>
-                <Item data-tip data-for="RunProject" style={{ marginBottom: 10 }}>4. Run Project</Item>
+                <Item style={{ marginBottom: 10, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+                    <p>4. Run Project</p>
+                    <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="RunProject" />
+                </Item>
+                {/* <Item style={{ marginBottom: 10 }}> <MdInfo style={{ marginBottom: -5 }} size={20} data-tip data-for="RunProject" /></Item> */}
                 <ReactTooltip id="RunProject" place="top" effect="solid">Textttt</ReactTooltip>
                 <Link to='/map-overlay'>
                     <Button variant="outlined">
