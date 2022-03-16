@@ -53,7 +53,6 @@ export const HomePage = (props) => {
         else if (selectedType == "upload") {
             const uploadSegmentationResponse = await upload_Segmentation(segModel);
             console.log(uploadSegmentationResponse, "uploadSegmentationResponse")
-            localStorage.setItem("Bbox", JSON.stringify(uploadSegmentationResponse[1]["bbox"]))
             // const boundingBox = await fetchSegmentationBoundingMask();
         }
         else {
@@ -78,10 +77,16 @@ export const HomePage = (props) => {
             selectedFile.name
         );
 
-        console.log(selectedFile, '666666666666666666');
-        console.log(formData, '98451542154')
+        console.log(selectedFile);
+        console.log(formData)
 
         const uploadedFile = await Upload(formData)
+        var x =JSON.stringify(uploadedFile[1]["bbox"]);
+        console.log("["+(x.replaceAll('[',"").replaceAll(']',"").replaceAll('\"',""))+"]")
+        var boundings = "["+(x.replaceAll('[',"").replaceAll(']',"").replaceAll('\"',""))+"]";
+        console.log(localStorage.getItem("Bbox"),"Bboxx")
+        // console.log(JSON.stringify(uploadedFile[1]["bbox"]),"uploadedFileResponse")
+        localStorage.setItem("Bbox", boundings)
     };
     return (
         <Grid container spacing={8} padding={10}>

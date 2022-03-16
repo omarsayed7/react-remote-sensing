@@ -23,7 +23,9 @@ export async function upload_Segmentation(seg_model) {
             "Content-Type": "application/json"
         },
     });
-    return Buffer.from(res.data.data, 'binary').toString('base64');
+    // console.log(res,"789543135468")
+    return res
+    // return Buffer.from(res.data.data, 'binary').toString('base64');
 }
 
 export async function Upload(formData) {

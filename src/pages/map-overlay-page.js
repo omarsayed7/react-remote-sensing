@@ -24,11 +24,14 @@ export class MapOverlayPage extends Component {
         this.myRef = React.createRef();
         this.state = {
             maskImage: '',
-            bounds: [[37.802273929613634, -122.456784725091],
-            [37.803570589851, -122.45458745943327]]
+            bounds: []
         }
     }
     async componentDidMount() {
+        function refreshPage() {
+            window.location.reload(false);
+          }
+        
         const segmentationMask = await fetchSegmentationMask();
         console.log("HERE:", segmentationMask)
         const maskURL = segmentationMask.request.responseURL
@@ -41,8 +44,9 @@ export class MapOverlayPage extends Component {
         const bBox = localStorage.getItem('Bbox').split("[")[1].split(']')[0].split(',')
         const BboxBounds = [[parseFloat(bBox[1]), parseFloat(bBox[0])], [parseFloat(bBox[3]), parseFloat(bBox[2])]]
         console.log(this.state, BboxBounds, "STATE")
+        console.log(this.state.maskImage, "URL")
         return (
-            <MapContainer center={[37.8189, -122.4786]} zoom={13} zoomControl={false} style={{ height: "90vh" }} >
+            <MapContainer center={[parseFloat(bBox[1]), parseFloat(bBox[0])]} zoom={13} zoomControl={false} style={{ height: "90vh" }} >
                 <TileLayer
                     // attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     // url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"

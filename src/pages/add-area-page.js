@@ -15,6 +15,7 @@ export const AddAreaPage = () => {
         setbbox(event);
         console.log(typeof (event), "testttt")
         localStorage.setItem("Bbox", JSON.stringify(event));
+        console.log(localStorage.getItem('Bbox'))
     };
     return (
         <Container>
