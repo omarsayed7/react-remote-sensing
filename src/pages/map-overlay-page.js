@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { MapContainer, TileLayer, FeatureGroup, ImageOverlay } from 'react-leaflet';
 import L from 'leaflet';
 import download from "downloadjs";
-import { fetchSegmentationMask } from '../services'
+import { fetchSegmentationMask, fetchUploadSegmentationMask } from '../services'
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -30,14 +30,25 @@ export class MapOverlayPage extends Component {
     async componentDidMount() {
         function refreshPage() {
             window.location.reload(false);
-          }
-        
-        const segmentationMask = await fetchSegmentationMask();
-        console.log("HERE:", segmentationMask)
-        const maskURL = segmentationMask.request.responseURL
-        console.log("HERE222:", maskURL)
-        // create an image
-        this.setState({ maskImage: maskURL })
+        }
+        const selectedType = await localStorage.getItem("selectedType")
+        if (selectedType == "addArea") {
+            const segmentationMask = await fetchSegmentationMask();
+            console.log("HERE:", segmentationMask)
+            const maskURL = segmentationMask.request.responseURL
+            console.log("HERE222:", maskURL)
+            // create an image
+            this.setState({ maskImage: maskURL })
+        }
+        else if (selectedType == "upload") {
+            const segmentationUploadMask = await fetchUploadSegmentationMask();
+            console.log("HERE:", segmentationUploadMask)
+            const maskUploadURL = segmentationUploadMask.request.responseURL
+            console.log("HERE222:", maskUploadURL)
+            // create an image
+            this.setState({ maskImage: maskUploadURL })
+        } else
+            console.log("please select type")
     }
 
     render() {
