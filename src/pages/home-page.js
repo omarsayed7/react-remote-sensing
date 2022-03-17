@@ -36,10 +36,19 @@ export const HomePage = (props) => {
         setAiModel('');
     };
     const onSegmentation = async () => {
-        const segModel = {
+        const newHeight = localStorage.getItem("height")
+        console.log(newHeight, "newHeight")
+        const segUploadModel = {
             "Bbox": bbox,
             "Width": 400,
             "Height": 400,
+            "Algorithm": aiModel,
+            "PostProcessing": postProcessing
+        }
+        const segModel = {
+            "Bbox": bbox,
+            "Width": 400,
+            "Height": parseInt(newHeight),
             "Algorithm": aiModel,
             "PostProcessing": postProcessing
         }
@@ -51,7 +60,7 @@ export const HomePage = (props) => {
 
         }
         else if (selectedType == "upload") {
-            const uploadSegmentationResponse = await upload_Segmentation(segModel);
+            const uploadSegmentationResponse = await upload_Segmentation(segUploadModel);
             console.log(uploadSegmentationResponse, "uploadSegmentationResponse")
             // const boundingBox = await fetchSegmentationBoundingMask();
         }

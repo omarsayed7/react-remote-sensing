@@ -36,16 +36,18 @@ export class DrawMapComponent extends Component {
         console.log(`_onEdited: edited ${numEdited} layers`, e);
 
         this._onChange();
-        
-    };
 
+    };
+    //zoom 13 68 16 476 11 17
     _onCreated = (e) => {
         let type = e.layerType;
         let layer = e.layer;
-        console.log(layer._latlngs[0])
+        var newHeight = ((layer._rawPxBounds.max.x - layer._rawPxBounds.min.x) / (layer._rawPxBounds.max.y - layer._rawPxBounds.min.y)) * 400;
+        console.log(newHeight, "ratio")
+        localStorage.setItem("height", newHeight.toString())
         let minPoint = layer._latlngs[0][0]
         let maxPoint = layer._latlngs[0][2]
-        let outputBbox = [minPoint.lng, minPoint.lat,maxPoint.lng,maxPoint.lat]
+        let outputBbox = [minPoint.lng, minPoint.lat, maxPoint.lng, maxPoint.lat]
         this.props.handleBbox(outputBbox)
         if (type === 'marker') {
             // Do marker specific actions
@@ -136,7 +138,7 @@ export class DrawMapComponent extends Component {
 
         leafletGeoJSON.eachLayer((layer) => {
             leafletFG.addLayer(layer);
-            
+
         });
 
         // store the ref for future access to content
