@@ -47,15 +47,15 @@ export const HomePage = (props) => {
         }
         const segModel = {
             "Bbox": bbox,
-            "Width": 400,
-            "Height": parseInt(newHeight),
+            "Width": parseInt(newHeight),
+            "Height": 400,
             "Algorithm": aiModel,
             "PostProcessing": postProcessing
         }
         console.log("MODEL", segModel)
         const selectedType = await localStorage.getItem("selectedType")
         if (selectedType == "addArea") {
-            const segmentationResponse = await segmentation(segModel);
+            const segmentationResponse = await segmentation(segUploadModel);
             console.log(segmentationResponse, "segmentationResponse")
 
         }
@@ -105,7 +105,7 @@ export const HomePage = (props) => {
                     <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="DataSource" />
                 </Item>
                 {/* <MdInfo data-tip data-for="DataSource" /> */}
-                <ReactTooltip id="DataSource" place="top" effect="solid">Textttt</ReactTooltip>
+                <ReactTooltip id="DataSource" place="top" effect="solid">Choose One Option for choosing Data Source</ReactTooltip>
                 <Link to='/add-area'>
                     <Button variant="outlined"
                         startIcon={<AddCircleIcon />} >
@@ -123,7 +123,7 @@ export const HomePage = (props) => {
                     <div style={{ display: "flex", flexDirection: "row", alignContent: "center" }}>
                         <a href="https://earthexplorer.usgs.gov/" target="_blank">Click here</a>
                         <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="TIFFiles" />
-                        <ReactTooltip id="TIFFiles" place="top" effect="solid">Texttt12t</ReactTooltip>
+                        <ReactTooltip id="TIFFiles" place="top" effect="solid">Redirect to usgs.com</ReactTooltip>
                     </div>
                 </div>
             </Grid>
@@ -133,7 +133,7 @@ export const HomePage = (props) => {
                     <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="AIModel" />
                 </Item>
                 {/* <Item  > <MdInfo style={{ marginBottom: -5 }} size={20} data-tip data-for="AIModel" /></Item> */}
-                <ReactTooltip id="AIModel" place="top" effect="solid">Textttt</ReactTooltip>
+                <ReactTooltip id="AIModel" place="top" effect="solid">Choose One AI model for classification</ReactTooltip>
                 <RadioGroup
                     aria-labelledby="demo-controlled-radio-buttons-group"
                     name="controlled-radio-buttons-group"
@@ -154,7 +154,7 @@ export const HomePage = (props) => {
                     <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="PostProcessing" />
                 </Item>
                 {/* <Item  > <MdInfo style={{ marginBottom: -5 }} size={20} data-tip data-for="PostProcessing" /></Item> */}
-                <ReactTooltip id="PostProcessing" place="top" effect="solid">Texttt12t</ReactTooltip>
+                <ReactTooltip id="PostProcessing" place="top" effect="solid">Choose "Download thematic layer" for downloading the thematic layer or "Show on Map" for viewing the classified image on the map</ReactTooltip>
                 <RadioGroup
                     aria-labelledby="demo-controlled-radio-buttons-group"
                     name="controlled-radio-buttons-group"
@@ -173,7 +173,7 @@ export const HomePage = (props) => {
                     <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="RunProject" />
                 </Item>
                 {/* <Item style={{ marginBottom: 10 }}> <MdInfo style={{ marginBottom: -5 }} size={20} data-tip data-for="RunProject" /></Item> */}
-                <ReactTooltip id="RunProject" place="top" effect="solid">Textttt</ReactTooltip>
+                <ReactTooltip id="RunProject" place="top" effect="solid">Choose "Run Processing" to run your model or "Thematic Overlay" for viewing the map</ReactTooltip>
                 <Link to='/map-overlay'>
                     <Button variant="outlined">
                         Thematic overlay
