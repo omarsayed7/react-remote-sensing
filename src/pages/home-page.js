@@ -24,6 +24,7 @@ export const HomePage = (props) => {
     const [aiModel, setAiModel] = useState('');
     const [postProcessing, setPostProssesing] = useState('')
     const [selectedFile, setSelectedFile] = useState(null)
+    const [fileName, setFileName] = useState()
     // const [selectedType, setSelectedType] = useState(0)
     const handleChangeAiModel = (event) => {
         setAiModel(event.target.value);
@@ -69,7 +70,8 @@ export const HomePage = (props) => {
         }
     }
     const onUploadFile = (event) => {
-        console.log(event.target.files[0]);
+        console.log(event.target.files[0], "reachedHere");
+        setFileName(event.target.files[0].name)
         setSelectedFile(event.target.files[0])
         console.log(selectedFile);
     }
@@ -105,25 +107,39 @@ export const HomePage = (props) => {
                     <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="DataSource" />
                 </Item>
                 {/* <MdInfo data-tip data-for="DataSource" /> */}
-                <ReactTooltip id="DataSource" place="top" effect="solid">Choose One Option for choosing Data Source</ReactTooltip>
-                <Link to='/add-area'>
-                    <Button variant="outlined"
-                        startIcon={<AddCircleIcon />} >
-                        Add Area
-                    </Button>
-                </Link>
-                <div>
-                    <input style={{ marginTop: 10 }} accept="image/*" id="contained-button-file" type="file" onChange={onUploadFile} />
-                    <Button onClick={onFileUpload}>
-                        Upload
-                    </Button>
+                <ReactTooltip id="DataSource" place="top" effect="solid">Choose one option for the Data source type.</ReactTooltip>
+                <div style={{ display: "flex", flexDirection: "row" }}>
+
+                    <Link to='/add-area'>
+                        <Button variant="outlined"
+                            startIcon={<AddCircleIcon />} >
+                            Add Area
+                        </Button>
+                    </Link>
+                    <MdInfo style={{ padding: 5, paddingLeft: 5 }} size={20} data-tip data-for="AddArea" />
+                    <ReactTooltip id="AddArea" place="top" effect="solid">For viewing Leaflet Map view</ReactTooltip>
+                </div>
+                <div >
+                    <p style={{ marginBottom: 1, fontWeight: "bold" }}>Upload .TIF File</p>
+                    <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                        <input style={{ marginTop: 10, display: 'none' }} accept="image/*" id="contained-button-file" type="file" onChange={onUploadFile} onSubmit={onFileUpload} />
+                        <label htmlFor="contained-button-file">
+                            <Button variant="outlined" component="span"
+                                startIcon={<AddCircleIcon />}>
+                                Upload
+                            </Button>
+                        </label>
+                        <p style={{ marginLeft: 5 }}>{fileName}</p>
+                        <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="Upload" />
+                        <ReactTooltip id="Upload" place="top" effect="solid">Upload your (.TIF) file extension</ReactTooltip>
+                    </div>
                 </div>
                 <div>
                     <p style={{ marginBottom: -5 }}> To download more TIF files</p>
                     <div style={{ display: "flex", flexDirection: "row", alignContent: "center" }}>
                         <a href="https://earthexplorer.usgs.gov/" target="_blank">Click here</a>
                         <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="TIFFiles" />
-                        <ReactTooltip id="TIFFiles" place="top" effect="solid">Redirect to usgs.com</ReactTooltip>
+                        <ReactTooltip id="TIFFiles" place="top" effect="solid">Redirection for USGS.com</ReactTooltip>
                     </div>
                 </div>
             </Grid>
@@ -133,7 +149,7 @@ export const HomePage = (props) => {
                     <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="AIModel" />
                 </Item>
                 {/* <Item  > <MdInfo style={{ marginBottom: -5 }} size={20} data-tip data-for="AIModel" /></Item> */}
-                <ReactTooltip id="AIModel" place="top" effect="solid">Choose One AI model for classification</ReactTooltip>
+                <ReactTooltip id="AIModel" place="top" effect="solid">Choose AI model classification type</ReactTooltip>
                 <RadioGroup
                     aria-labelledby="demo-controlled-radio-buttons-group"
                     name="controlled-radio-buttons-group"
@@ -154,7 +170,7 @@ export const HomePage = (props) => {
                     <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="PostProcessing" />
                 </Item>
                 {/* <Item  > <MdInfo style={{ marginBottom: -5 }} size={20} data-tip data-for="PostProcessing" /></Item> */}
-                <ReactTooltip id="PostProcessing" place="top" effect="solid">Choose "Download thematic layer" for downloading the thematic layer or "Show on Map" for viewing the classified image on the map</ReactTooltip>
+                <ReactTooltip id="PostProcessing" place="top" effect="solid">Choose post-processing type, Download the thematic layer on your device OR Show the classified image on the map</ReactTooltip>
                 <RadioGroup
                     aria-labelledby="demo-controlled-radio-buttons-group"
                     name="controlled-radio-buttons-group"
@@ -173,7 +189,7 @@ export const HomePage = (props) => {
                     <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="RunProject" />
                 </Item>
                 {/* <Item style={{ marginBottom: 10 }}> <MdInfo style={{ marginBottom: -5 }} size={20} data-tip data-for="RunProject" /></Item> */}
-                <ReactTooltip id="RunProject" place="top" effect="solid">Choose "Run Processing" to run your model or "Thematic Overlay" for viewing the map</ReactTooltip>
+                <ReactTooltip id="RunProject" place="top" effect="solid">Run Processing to run the AI model OR Choose Thematic overlay for showing the map</ReactTooltip>
                 <Link to='/map-overlay'>
                     <Button variant="outlined">
                         Thematic overlay
