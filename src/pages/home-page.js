@@ -69,13 +69,17 @@ export const HomePage = (props) => {
             console.log("Please select Data source")
         }
     }
-    const onUploadFile = (event) => {
+    // const onUploadFile = (event) => {
+    //     console.log(event.target.files[0], "reachedHere");
+    //     setFileName(event.target.files[0].name)
+    //     setSelectedFile(event.target.files[0])
+    //     console.log(selectedFile);
+    // }
+    const onFileUpload = async (event) => {
         console.log(event.target.files[0], "reachedHere");
         setFileName(event.target.files[0].name)
         setSelectedFile(event.target.files[0])
         console.log(selectedFile);
-    }
-    const onFileUpload = async () => {
         localStorage.setItem("selectedType", "upload")
         // setSelectedType(2)
         // Create an object of formData
@@ -122,7 +126,7 @@ export const HomePage = (props) => {
                 <div >
                     <p style={{ marginBottom: 1, fontWeight: "bold" }}>Upload .TIF File</p>
                     <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-                        <input style={{ marginTop: 10, display: 'none' }} accept="image/*" id="contained-button-file" type="file" onChange={onUploadFile} onSubmit={onFileUpload} />
+                        <input style={{ marginTop: 10, display: 'none' }} accept="image/*" id="contained-button-file" type="file" onChange={onFileUpload} />
                         <label htmlFor="contained-button-file">
                             <Button variant="outlined" component="span"
                                 startIcon={<AddCircleIcon />}>
