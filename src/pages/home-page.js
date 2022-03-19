@@ -77,10 +77,12 @@ export const HomePage = (props) => {
     // }
     const onFileUpload = async (event) => {
         console.log(event.target.files[0], "reachedHere");
+        var xxx = event.target.files[0];
         setFileName(event.target.files[0].name)
         setSelectedFile(event.target.files[0])
         console.log(selectedFile);
         localStorage.setItem("selectedType", "upload")
+        console.log("re11")
         // setSelectedType(2)
         // Create an object of formData
         const formData = new FormData();
@@ -88,13 +90,13 @@ export const HomePage = (props) => {
         // Update the formData object
         formData.append(
             "file",
-            selectedFile,
-            selectedFile.name
+            xxx,
+            xxx.name
         );
 
         console.log(selectedFile);
         console.log(formData)
-
+        console.log("re12")
         const uploadedFile = await Upload(formData)
         var x = JSON.stringify(uploadedFile[1]["bbox"]);
         console.log("[" + (x.replaceAll('[', "").replaceAll(']', "").replaceAll('\"', "")) + "]")
