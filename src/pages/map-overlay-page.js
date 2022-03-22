@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { MapContainer, TileLayer, FeatureGroup, ImageOverlay } from 'react-leaflet';
+import { MapContainer, TileLayer, ImageOverlay } from 'react-leaflet';
 import L from 'leaflet';
-import download from "downloadjs";
 import { fetchSegmentationMask, fetchUploadSegmentationMask } from '../services'
 
 delete L.Icon.Default.prototype._getIconUrl;

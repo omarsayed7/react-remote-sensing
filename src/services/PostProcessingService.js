@@ -1,6 +1,5 @@
 import API from "./APIs";
 import axios from "axios";
-import { Buffer } from 'buffer';
 
 export async function fetchSegmentationMask() {
     let URL = `${API.SEGMENTATION_API_URL}`;

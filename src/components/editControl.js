@@ -1,9 +1,7 @@
 import { PropTypes } from 'prop-types';
-import Draw from 'leaflet-draw'; // eslint-disable-line
 import isEqual from 'fast-deep-equal';
 import React, { useRef } from 'react';
 import { useLeafletContext } from '@react-leaflet/core';
-import L from 'leaflet';
 
 import leaflet, { Map, Control } from 'leaflet';
 
@@ -28,7 +26,7 @@ function EditControl(props) {
     const propsRef = useRef(props);
 
     const onDrawCreate = (e) => {
-        console.log(e,'drawoom')
+        console.log(e, 'drawoom')
         const { onCreated } = props;
         const container = context.layerContainer || context.map;
         container.addLayer(e.layer);

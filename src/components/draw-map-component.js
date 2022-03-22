@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
-import { MapContainer, TileLayer, Circle, FeatureGroup } from 'react-leaflet';
+import { MapContainer, TileLayer, FeatureGroup } from 'react-leaflet';
 import L from 'leaflet';
 import EditControl from './editControl'
-import ReactDOM from 'react-dom';
-import html2canvas from 'html2canvas';
-import * as htmlToImage from 'html-to-image';
-import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
-import { ContactPageSharp } from '@mui/icons-material';
 // work around broken icons when using webpack, see https://github.com/PaulLeCam/react-leaflet/issues/255
 
 delete L.Icon.Default.prototype._getIconUrl;
