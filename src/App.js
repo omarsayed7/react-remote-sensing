@@ -8,6 +8,7 @@ import { HomePage, AddAreaPage, MapOverlayPage } from "./pages"
 // import DrawMap from './components/drawMap'
 import './App.css';
 
+window.localStorage.clear();
 class App extends Component {
   state = {
     incidents: [],
