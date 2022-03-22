@@ -11,7 +11,11 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import ReactTooltip from "react-tooltip";
 import { MdInfo } from "@react-icons/all-files/md/MdInfo"
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { segmentation, Upload, upload_Segmentation, fetchSegmentationBoundingMask } from '../services'
+
 
 const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,
@@ -19,9 +23,35 @@ const Item = styled(Paper)(({ theme }) => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
 }));
+
+const ModalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 export const HomePage = (props) => {
     let bbox = localStorage.getItem('Bbox')
     console.log(bbox)
+    //Handling Modal View
+    const [open, setOpen] = useState(false);
+    const [modalTitle, setmodalTitle] = useState('')
+    const [modalDescription, setmodalDescription] = useState('')
+
+    const handleOpen = (title, description) => {
+        console.log(title)
+        setmodalTitle(title)
+        setmodalDescription(description)
+        setOpen(true)
+    };
+    const handleClose = () => setOpen(false);
+
+    // Handling Classification Object
     const [aiModel, setAiModel] = useState('');
     const [postProcessing, setPostProssesing] = useState('')
     const [selectedFile, setSelectedFile] = useState(null)
@@ -37,6 +67,7 @@ export const HomePage = (props) => {
         setPostProssesing('');
         setAiModel('');
     };
+
     const onSegmentation = async () => {
         const newHeight = localStorage.getItem("height")
         console.log(newHeight, "newHeight")
@@ -64,18 +95,12 @@ export const HomePage = (props) => {
         else if (selectedType == "upload") {
             const uploadSegmentationResponse = await upload_Segmentation(segUploadModel);
             console.log(uploadSegmentationResponse, "uploadSegmentationResponse")
-            // const boundingBox = await fetchSegmentationBoundingMask();
         }
         else {
             console.log("Please select Data source")
         }
     }
-    // const onUploadFile = (event) => {
-    //     console.log(event.target.files[0], "reachedHere");
-    //     setFileName(event.target.files[0].name)
-    //     setSelectedFile(event.target.files[0])
-    //     console.log(selectedFile);
-    // }
+
     const onFileUpload = async (event) => {
         console.log(event.target.files[0], "reachedHere");
         var xxx = event.target.files[0];
@@ -108,13 +133,34 @@ export const HomePage = (props) => {
     };
     return (
         <Grid container spacing={8} padding={10}>
+            <div>
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={ModalStyle}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            {modalTitle}
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                            {modalDescription}
+                        </Typography>
+                    </Box>
+                </Modal>
+            </div>
             <Grid item xs={6} md={3} sx={{ flex: 1, flexDirection: "column", display: "flex" }}>
                 <Item style={{ marginBottom: 10, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
                     <p>1. Data Source</p>
-                    <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="DataSource" />
+                    <Button onClick={() => handleOpen("Hello", "From DataSource")} style={{ color: "grey" }}>
+                        <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="DataSource" />
+                    </Button>
                 </Item>
                 {/* <MdInfo data-tip data-for="DataSource" /> */}
-                <ReactTooltip id="DataSource" place="top" effect="solid">Choose one option for the Data source type.</ReactTooltip>
+                <ReactTooltip id="DataSource" place="top" effect="solid">
+                    Choose one option for the Data source type.
+                </ReactTooltip>
                 <div style={{ display: "flex", flexDirection: "row" }}>
 
                     <Link to='/add-area'>
@@ -148,12 +194,20 @@ export const HomePage = (props) => {
                         <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="TIFFiles" />
                         <ReactTooltip id="TIFFiles" place="top" effect="solid">Redirection for USGS.com</ReactTooltip>
                     </div>
+                    <p style={{ marginBottom: -5 }}> OpenstreetMaps</p>
+                    <div style={{ display: "flex", flexDirection: "row", alignContent: "center" }}>
+                        <a href="https://www.openstreetmap.org/#map=6/31.413/31.802" target="_blank">Click here</a>
+                        <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="Openstreetmaps" />
+                        <ReactTooltip id="Openstreetmaps" place="top" effect="solid">Redirection for OpenStreetMaps.com</ReactTooltip>
+                    </div>
                 </div>
             </Grid>
             <Grid item xs={6} md={3}>
                 <Item style={{ marginBottom: 10, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
                     <p>2. AI Model</p>
-                    <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="AIModel" />
+                    <Button onClick={() => handleOpen("Hello", "From AI Model")} style={{ color: "grey" }}>
+                        <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="AIModel" />
+                    </Button>
                 </Item>
                 {/* <Item  > <MdInfo style={{ marginBottom: -5 }} size={20} data-tip data-for="AIModel" /></Item> */}
                 <ReactTooltip id="AIModel" place="top" effect="solid">Choose AI model classification type</ReactTooltip>
@@ -174,7 +228,9 @@ export const HomePage = (props) => {
             <Grid item xs={6} md={3}>
                 <Item style={{ marginBottom: 10, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
                     <p>3. Post-processing</p>
-                    <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="PostProcessing" />
+                    <Button onClick={() => handleOpen("Hello", "From Post Processing")} style={{ color: "grey" }}>
+                        <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="PostProcessing" />
+                    </Button>
                 </Item>
                 {/* <Item  > <MdInfo style={{ marginBottom: -5 }} size={20} data-tip data-for="PostProcessing" /></Item> */}
                 <ReactTooltip id="PostProcessing" place="top" effect="solid">Choose post-processing type, Download the thematic layer on your device OR Show the classified image on the map</ReactTooltip>
@@ -193,7 +249,9 @@ export const HomePage = (props) => {
             <Grid item xs={6} md={3}>
                 <Item style={{ marginBottom: 10, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
                     <p>4. Run Project</p>
-                    <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="RunProject" />
+                    <Button onClick={() => handleOpen("Hello", "From Run Project")} style={{ color: "grey" }}>
+                        <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="RunProject" />
+                    </Button>
                 </Item>
                 {/* <Item style={{ marginBottom: 10 }}> <MdInfo style={{ marginBottom: -5 }} size={20} data-tip data-for="RunProject" /></Item> */}
                 <ReactTooltip id="RunProject" place="top" effect="solid">Run Processing to run the AI model OR Choose Thematic overlay for showing the map</ReactTooltip>
@@ -214,6 +272,15 @@ export const HomePage = (props) => {
                     Clear selection
                 </Button>
             </Grid>
+            <Grid item xs={6} md={3}>
+                <Item style={{ marginBottom: 10, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+                    <p>5. Processing history</p>
+                    <Button onClick={() => handleOpen("Hello", "From Run Project")} style={{ color: "grey" }}>
+                        <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="RunProject" />
+                    </Button>
+                </Item>
+            </Grid>
         </Grid >
+
     );
 };
