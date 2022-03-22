@@ -21,6 +21,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 export const HomePage = (props) => {
     let bbox = localStorage.getItem('Bbox')
+    console.log(bbox)
     const [aiModel, setAiModel] = useState('');
     const [postProcessing, setPostProssesing] = useState('')
     const [selectedFile, setSelectedFile] = useState(null)
