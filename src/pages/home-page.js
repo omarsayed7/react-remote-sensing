@@ -56,6 +56,7 @@ export const HomePage = (props) => {
     const [postProcessing, setPostProssesing] = useState('')
     const [selectedFile, setSelectedFile] = useState(null)
     const [fileName, setFileName] = useState()
+    const [segResponse, setSegResponse] = useState('')
     // const [selectedType, setSelectedType] = useState(0)
     const handleChangeAiModel = (event) => {
         setAiModel(event.target.value);
@@ -90,15 +91,21 @@ export const HomePage = (props) => {
         if (selectedType == "addArea") {
             const segmentationResponse = await segmentation(segUploadModel);
             console.log(segmentationResponse, "segmentationResponse")
-
+            setSegResponse(segmentationResponse.message)
         }
         else if (selectedType == "upload") {
             const uploadSegmentationResponse = await upload_Segmentation(segUploadModel);
             console.log(uploadSegmentationResponse, "uploadSegmentationResponse")
+            setSegResponse(uploadSegmentationResponse.message)
         }
         else {
             console.log("Please select Data source")
         }
+        //After finishing the segmentation clear the inputs again.
+        setSelectedFile(null);
+        setFileName()
+        setPostProssesing('');
+        setAiModel('');
     }
 
     const onFileUpload = async (event) => {
@@ -253,13 +260,9 @@ export const HomePage = (props) => {
                         <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="RunProject" />
                     </Button>
                 </Item>
-                {/* <Item style={{ marginBottom: 10 }}> <MdInfo style={{ marginBottom: -5 }} size={20} data-tip data-for="RunProject" /></Item> */}
-                <ReactTooltip id="RunProject" place="top" effect="solid">Run Processing to run the AI model OR Choose Thematic overlay for showing the map</ReactTooltip>
-                <Link to='/map-overlay'>
-                    <Button variant="outlined">
-                        Thematic overlay
-                    </Button>
-                </Link>
+                <ReactTooltip id="RunProject" place="top" effect="solid">
+                    Run Processing to run the AI model OR Choose Thematic overlay for showing the map
+                </ReactTooltip>
                 {aiModel != '' && postProcessing != '' && !!bbox ?
                     <Button variant="outlined"
                         onClick={onSegmentation}>
@@ -279,6 +282,14 @@ export const HomePage = (props) => {
                         <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="RunProject" />
                     </Button>
                 </Item>
+                {segResponse === "Created!" ?
+                    <Link to='/map-overlay'>
+                        <Button variant="outlined">
+                            Thematic overlay
+                        </Button>
+                    </Link>
+                    :
+                    null}
             </Grid>
         </Grid >
 
