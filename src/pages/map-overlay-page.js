@@ -27,10 +27,8 @@ export class MapOverlayPage extends Component {
         }
     }
     async componentDidMount() {
-        function refreshPage() {
-            window.location.reload(false);
-        }
-        const selectedType = await localStorage.getItem("selectedType")
+        const selectedType = localStorage.getItem("selectedType")
+        console.log("[INFO]", selectedType)
         if (selectedType == "addArea") {
             const segmentationMask = await fetchSegmentationMask();
             console.log("HERE:", segmentationMask)
@@ -41,9 +39,9 @@ export class MapOverlayPage extends Component {
         }
         else if (selectedType == "upload") {
             const segmentationUploadMask = await fetchUploadSegmentationMask();
-            console.log("HERE:", segmentationUploadMask)
+            console.log("2HERE:", segmentationUploadMask)
             const maskUploadURL = segmentationUploadMask.request.responseURL
-            console.log("HERE222:", maskUploadURL)
+            console.log("2HERE222:", maskUploadURL)
             // create an image
             this.setState({ maskImage: maskUploadURL })
         } else
