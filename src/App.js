@@ -1,16 +1,13 @@
-import React, { Component, Fragment } from 'react';
-import axios from 'axios';
+import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-
-import MapSearch from './components/Map'
-import NewMap from './components/newMap'
 import { HomePage, AddAreaPage, MapOverlayPage } from "./pages"
 // import DrawMap from './components/drawMap'
 import './App.css';
 
 class App extends Component {
-  state = {
-    incidents: [],
+  constructor(props) {
+    super(props);
+    localStorage.clear();
   }
   render() {
     return (
