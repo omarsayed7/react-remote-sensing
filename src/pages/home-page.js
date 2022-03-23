@@ -205,8 +205,8 @@ export const HomePage = (props) => {
                         <ReactTooltip id="Upload" place="top" effect="solid">Upload your (.TIF) file extension</ReactTooltip>
                     </div>
                 </div>
-                <div>
-                    <p style={{ marginBottom: -5 }}> To download more TIF files</p>
+                <div style={{ paddingTop: '5%' }}>
+                    <p style={{ marginBottom: -5 }}> USGS for download free images</p>
                     <div style={{ display: "flex", flexDirection: "row", alignContent: "center" }}>
                         <a href="https://earthexplorer.usgs.gov/" target="_blank">Click here</a>
                         <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="TIFFiles" />
