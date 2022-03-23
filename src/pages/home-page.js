@@ -88,14 +88,21 @@ export const HomePage = (props) => {
         setStartProgress(true)
         setPercentage(0)
         const newHeight = localStorage.getItem("height")
+        const newWidth = localStorage.getItem("width")
+        if (newHeight > 1280 || newWidth > 1280) {
+            newHeight = newHeight / 10
+            newWidth = newWidth / 10
+        }
+        console.log(newHeight, "newHeight")
+        console.log(newWidth, "newWidth")
         const segUploadModel = {
             "Algorithm": aiModel,
             "PostProcessing": postProcessing
         }
         const segModel = {
             "Bbox": bbox,
-            "Width": parseInt(newHeight),
-            "Height": 400,
+            "Width": parseInt(newWidth),
+            "Height": parseInt(newHeight),
             "Algorithm": aiModel,
             "PostProcessing": postProcessing
         }
