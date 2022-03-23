@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import MapSearch from './components/Map'
 import NewMap from './components/newMap'
-import { HomePage, AddAreaPage, MapOverlayPage } from "./pages"
+import { HomePage, AddAreaPage, MapOverlayPage, ContactUsPage } from "./pages"
 // import DrawMap from './components/drawMap'
 import './App.css';
 
@@ -20,6 +20,7 @@ class App extends Component {
           <Route path="/" exact element={<HomePage />} />
           <Route path="/add-area" element={<AddAreaPage />} />
           <Route path="/map-overlay" element={<MapOverlayPage />} />
+          <Route path="/contact-us" element={<ContactUsPage />} />
 
         </Routes >
       </Router>
