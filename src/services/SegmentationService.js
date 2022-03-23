@@ -11,7 +11,7 @@ export async function segmentation(seg_model) {
             "Content-Type": "application/json"
         },
     });
-    return Buffer.from(res.data.data, 'binary').toString('base64');
+    return res
 }
 export async function upload_Segmentation(seg_model) {
     console.log(seg_model)
@@ -23,9 +23,7 @@ export async function upload_Segmentation(seg_model) {
             "Content-Type": "application/json"
         },
     });
-    // console.log(res,"789543135468")
     return res
-    // return Buffer.from(res.data.data, 'binary').toString('base64');
 }
 
 export async function Upload(formData) {

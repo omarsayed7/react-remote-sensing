@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useParams } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
@@ -11,7 +11,13 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import ReactTooltip from "react-tooltip";
 import { MdInfo } from "@react-icons/all-files/md/MdInfo"
-import { segmentation, Upload, upload_Segmentation, fetchSegmentationBoundingMask } from '../services'
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import { ProgressBar } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { segmentation, Upload, upload_Segmentation } from '../services'
+
 
 const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,
@@ -19,13 +25,53 @@ const Item = styled(Paper)(({ theme }) => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
 }));
+
+const ModalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 export const HomePage = (props) => {
     let bbox = localStorage.getItem('Bbox')
+    //Handling Modal View
+    const [open, setOpen] = useState(false);
+    const [modalTitle, setmodalTitle] = useState('')
+    const [modalDescription, setmodalDescription] = useState('')
+
+    const handleOpen = (title, description) => {
+        setmodalTitle(title)
+        setmodalDescription(description)
+        setOpen(true)
+    };
+    const handleClose = () => setOpen(false);
+
+    // Handling Classification Object
     const [aiModel, setAiModel] = useState('');
     const [postProcessing, setPostProssesing] = useState('')
     const [selectedFile, setSelectedFile] = useState(null)
     const [fileName, setFileName] = useState()
-    // const [selectedType, setSelectedType] = useState(0)
+    const [segResponse, setSegResponse] = useState('')
+    const [percentage, setPercentage] = useState(0);
+    const [startProgress, setStartProgress] = useState(false);
+
+    useEffect(() => {
+        let interval = null;
+        if (startProgress) {
+            interval = setInterval(() => {
+                setPercentage(percentage => percentage + 1);
+            }, 1000);
+        } else if (!startProgress && percentage !== 0) {
+            clearInterval(interval);
+        }
+        return () => clearInterval(interval);
+    }, [startProgress, percentage]);
+
     const handleChangeAiModel = (event) => {
         setAiModel(event.target.value);
     };
@@ -36,86 +82,105 @@ export const HomePage = (props) => {
         setPostProssesing('');
         setAiModel('');
     };
+
     const onSegmentation = async () => {
+        setSegResponse('')
+        setStartProgress(true)
+        setPercentage(0)
         const newHeight = localStorage.getItem("height")
+        const newWidth = localStorage.getItem("width")
+        if (newHeight > 1280 || newWidth > 1280) {
+            newHeight = newHeight / 10
+            newWidth = newWidth / 10
+        }
         console.log(newHeight, "newHeight")
+        console.log(newWidth, "newWidth")
         const segUploadModel = {
-            "Bbox": bbox,
-            "Width": 400,
-            "Height": 400,
             "Algorithm": aiModel,
             "PostProcessing": postProcessing
         }
         const segModel = {
             "Bbox": bbox,
-            "Width": parseInt(newHeight),
-            "Height": 400,
+            "Width": parseInt(newWidth),
+            "Height": parseInt(newHeight),
             "Algorithm": aiModel,
             "PostProcessing": postProcessing
         }
-        console.log("MODEL", segModel)
         const selectedType = await localStorage.getItem("selectedType")
         if (selectedType == "addArea") {
-            const segmentationResponse = await segmentation(segUploadModel);
-            console.log(segmentationResponse, "segmentationResponse")
-
+            const segmentationResponse = await segmentation(segModel);
+            setSegResponse(segmentationResponse.message)
+            setPercentage(100)
+            //After finishing the segmentation clear the inputs again.
+            setSelectedFile(null);
+            setFileName()
+            setPostProssesing('');
+            setAiModel('');
         }
         else if (selectedType == "upload") {
             const uploadSegmentationResponse = await upload_Segmentation(segUploadModel);
-            console.log(uploadSegmentationResponse, "uploadSegmentationResponse")
-            // const boundingBox = await fetchSegmentationBoundingMask();
-        }
-        else {
-            console.log("Please select Data source")
+            setSegResponse(uploadSegmentationResponse.message)
+            setPercentage(100)
+            //After finishing the segmentation clear the inputs again.
+            setSelectedFile(null);
+            setFileName()
+            setPostProssesing('');
+            setAiModel('');
         }
     }
-    // const onUploadFile = (event) => {
-    //     console.log(event.target.files[0], "reachedHere");
-    //     setFileName(event.target.files[0].name)
-    //     setSelectedFile(event.target.files[0])
-    //     console.log(selectedFile);
-    // }
+
     const onFileUpload = async (event) => {
-        console.log(event.target.files[0], "reachedHere");
-        var xxx = event.target.files[0];
+        var file = event.target.files[0];
         setFileName(event.target.files[0].name)
         setSelectedFile(event.target.files[0])
-        console.log(selectedFile);
         localStorage.setItem("selectedType", "upload")
-        console.log("re11")
-        // setSelectedType(2)
         // Create an object of formData
         const formData = new FormData();
 
         // Update the formData object
         formData.append(
             "file",
-            xxx,
-            xxx.name
+            file,
+            file.name
         );
 
-        console.log(selectedFile);
-        console.log(formData)
-        console.log("re12")
         const uploadedFile = await Upload(formData)
         var x = JSON.stringify(uploadedFile[1]["bbox"]);
-        console.log("[" + (x.replaceAll('[', "").replaceAll(']', "").replaceAll('\"', "")) + "]")
         var boundings = "[" + (x.replaceAll('[', "").replaceAll(']', "").replaceAll('\"', "")) + "]";
-        console.log(localStorage.getItem("Bbox"), "Bboxx")
-        // console.log(JSON.stringify(uploadedFile[1]["bbox"]),"uploadedFileResponse")
         localStorage.setItem("Bbox", boundings)
     };
     return (
         <Grid container spacing={8} padding={10}>
+            <div>
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={ModalStyle}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            {modalTitle}
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                            {modalDescription}
+                        </Typography>
+                    </Box>
+                </Modal>
+            </div>
             <Grid item xs={6} md={3} sx={{ flex: 1, flexDirection: "column", display: "flex" }}>
                 <Item style={{ marginBottom: 10, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
                     <p>1. Data Source</p>
-                    <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="DataSource" />
+                    <Button onClick={() => handleOpen("Hello", "From DataSource")} style={{ color: "grey" }}>
+                        <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="DataSource" />
+                    </Button>
                 </Item>
                 {/* <MdInfo data-tip data-for="DataSource" /> */}
-                <ReactTooltip id="DataSource" place="top" effect="solid">Choose one option for the Data source type.</ReactTooltip>
+                <ReactTooltip id="DataSource" place="top" effect="solid">
+                    Choose one option for the Data source type.
+                </ReactTooltip>
+                <p style={{ marginBottom: 1, fontWeight: "bold", paddingTop: 10 }}>Add Area From Map</p>
                 <div style={{ display: "flex", flexDirection: "row" }}>
-
                     <Link to='/add-area'>
                         <Button variant="outlined"
                             startIcon={<AddCircleIcon />} >
@@ -135,7 +200,7 @@ export const HomePage = (props) => {
                                 Upload
                             </Button>
                         </label>
-                        <p style={{ marginLeft: 5 }}>{fileName}</p>
+                        <p style={{ marginLeft: 5, fontSize: 10 }}>{fileName}</p>
                         <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="Upload" />
                         <ReactTooltip id="Upload" place="top" effect="solid">Upload your (.TIF) file extension</ReactTooltip>
                     </div>
@@ -147,12 +212,20 @@ export const HomePage = (props) => {
                         <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="TIFFiles" />
                         <ReactTooltip id="TIFFiles" place="top" effect="solid">Redirection for USGS.com</ReactTooltip>
                     </div>
+                    <p style={{ marginBottom: -5 }}> OpenstreetMaps</p>
+                    <div style={{ display: "flex", flexDirection: "row", alignContent: "center" }}>
+                        <a href="https://www.openstreetmap.org/#map=6/31.413/31.802" target="_blank">Click here</a>
+                        <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="Openstreetmaps" />
+                        <ReactTooltip id="Openstreetmaps" place="top" effect="solid">Redirection for OpenStreetMaps.com</ReactTooltip>
+                    </div>
                 </div>
             </Grid>
             <Grid item xs={6} md={3}>
                 <Item style={{ marginBottom: 10, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
                     <p>2. AI Model</p>
-                    <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="AIModel" />
+                    <Button onClick={() => handleOpen("Hello", "From AI Model")} style={{ color: "grey" }}>
+                        <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="AIModel" />
+                    </Button>
                 </Item>
                 {/* <Item  > <MdInfo style={{ marginBottom: -5 }} size={20} data-tip data-for="AIModel" /></Item> */}
                 <ReactTooltip id="AIModel" place="top" effect="solid">Choose AI model classification type</ReactTooltip>
@@ -173,7 +246,9 @@ export const HomePage = (props) => {
             <Grid item xs={6} md={3}>
                 <Item style={{ marginBottom: 10, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
                     <p>3. Post-processing</p>
-                    <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="PostProcessing" />
+                    <Button onClick={() => handleOpen("Hello", "From Post Processing")} style={{ color: "grey" }}>
+                        <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="PostProcessing" />
+                    </Button>
                 </Item>
                 {/* <Item  > <MdInfo style={{ marginBottom: -5 }} size={20} data-tip data-for="PostProcessing" /></Item> */}
                 <ReactTooltip id="PostProcessing" place="top" effect="solid">Choose post-processing type, Download the thematic layer on your device OR Show the classified image on the map</ReactTooltip>
@@ -192,27 +267,60 @@ export const HomePage = (props) => {
             <Grid item xs={6} md={3}>
                 <Item style={{ marginBottom: 10, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
                     <p>4. Run Project</p>
-                    <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="RunProject" />
-                </Item>
-                {/* <Item style={{ marginBottom: 10 }}> <MdInfo style={{ marginBottom: -5 }} size={20} data-tip data-for="RunProject" /></Item> */}
-                <ReactTooltip id="RunProject" place="top" effect="solid">Run Processing to run the AI model OR Choose Thematic overlay for showing the map</ReactTooltip>
-                <Link to='/map-overlay'>
-                    <Button variant="outlined">
-                        Thematic overlay
+                    <Button onClick={() => handleOpen("Hello", "From Run Project")} style={{ color: "grey" }}>
+                        <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="RunProject" />
                     </Button>
-                </Link>
+                </Item>
+                <ReactTooltip id="RunProject" place="top" effect="solid">
+                    Run Processing to run the AI model OR Choose Thematic overlay for showing the map
+                </ReactTooltip>
                 {aiModel != '' && postProcessing != '' && !!bbox ?
                     <Button variant="outlined"
                         onClick={onSegmentation}>
                         Run processing
                     </Button>
                     : null}
-                <Button variant="outlined"
-                    startIcon={<RemoveCircleOutlineIcon />}
-                    onClick={handleClearSelection}>
-                    Clear selection
-                </Button>
+                <div style={{ paddingTop: 10 }}>
+                    <Button
+                        variant="outlined"
+                        startIcon={<RemoveCircleOutlineIcon />}
+                        onClick={handleClearSelection}>
+                        Clear selection
+                    </Button>
+                </div>
             </Grid>
-        </Grid >
+            <Grid item xs={6} md={3}>
+                <Item style={{ marginBottom: 10, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+                    <p>5. Processing history</p>
+                    <Button onClick={() => handleOpen("Hello", "From Run Project")} style={{ color: "grey" }}>
+                        <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="RunProject" />
+                    </Button>
+                </Item>
+                {startProgress ?
+                    <div style={{ paddingTop: 8 }}>
+                        <ProgressBar now={percentage} />
+                        <Typography>
+                            AI works
+                        </Typography>
+                    </div>
+                    :
+                    null}
+                {segResponse === "Created!" ?
+                    <div style={{ paddingTop: 10 }}>
+                        <Typography>
+                            Thematic Layer
+                        </Typography>
+                        <Link to='/map-overlay'>
+                            <Button variant="outlined">
+                                Thematic overlay
+                            </Button>
+                        </Link>
+                    </div>
+                    :
+                    null}
+            </Grid>
+            <a style={{ position: 'absolute', bottom: 20, right: 20, fontWeight: 'bold' }} href="./contact-us">Contact Us</a>
+        </Grid>
+
     );
 };

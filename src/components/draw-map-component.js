@@ -37,9 +37,11 @@ export class DrawMapComponent extends Component {
     _onCreated = (e) => {
         let type = e.layerType;
         let layer = e.layer;
-        var newHeight = ((layer._rawPxBounds.max.x - layer._rawPxBounds.min.x) / (layer._rawPxBounds.max.y - layer._rawPxBounds.min.y)) * 400;
+        var newHeight = (layer._rawPxBounds.max.y - layer._rawPxBounds.min.y);
+        var newWidth = (layer._rawPxBounds.max.x - layer._rawPxBounds.min.x);
         console.log(newHeight, "ratio")
         localStorage.setItem("height", newHeight.toString())
+        localStorage.setItem("width", newWidth.toString())
         let minPoint = layer._latlngs[0][0]
         let maxPoint = layer._latlngs[0][2]
         let outputBbox = [minPoint.lng, minPoint.lat, maxPoint.lng, maxPoint.lat]
