@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useParams } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
@@ -14,7 +14,9 @@ import { MdInfo } from "@react-icons/all-files/md/MdInfo"
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { segmentation, Upload, upload_Segmentation, fetchSegmentationBoundingMask } from '../services'
+import { ProgressBar } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { segmentation, Upload, upload_Segmentation } from '../services'
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -37,14 +39,12 @@ const ModalStyle = {
 };
 export const HomePage = (props) => {
     let bbox = localStorage.getItem('Bbox')
-    console.log(bbox)
     //Handling Modal View
     const [open, setOpen] = useState(false);
     const [modalTitle, setmodalTitle] = useState('')
     const [modalDescription, setmodalDescription] = useState('')
 
     const handleOpen = (title, description) => {
-        console.log(title)
         setmodalTitle(title)
         setmodalDescription(description)
         setOpen(true)
@@ -57,7 +57,21 @@ export const HomePage = (props) => {
     const [selectedFile, setSelectedFile] = useState(null)
     const [fileName, setFileName] = useState()
     const [segResponse, setSegResponse] = useState('')
-    // const [selectedType, setSelectedType] = useState(0)
+    const [percentage, setPercentage] = useState(0);
+    const [startProgress, setStartProgress] = useState(false);
+
+    useEffect(() => {
+        let interval = null;
+        if (startProgress) {
+            interval = setInterval(() => {
+                setPercentage(percentage => percentage + 1);
+            }, 1000);
+        } else if (!startProgress && percentage !== 0) {
+            clearInterval(interval);
+        }
+        return () => clearInterval(interval);
+    }, [startProgress, percentage]);
+
     const handleChangeAiModel = (event) => {
         setAiModel(event.target.value);
     };
@@ -70,12 +84,11 @@ export const HomePage = (props) => {
     };
 
     const onSegmentation = async () => {
+        setSegResponse('')
+        setStartProgress(true)
+        setPercentage(0)
         const newHeight = localStorage.getItem("height")
-        console.log(newHeight, "newHeight")
         const segUploadModel = {
-            "Bbox": bbox,
-            "Width": 400,
-            "Height": 400,
             "Algorithm": aiModel,
             "PostProcessing": postProcessing
         }
@@ -86,56 +99,47 @@ export const HomePage = (props) => {
             "Algorithm": aiModel,
             "PostProcessing": postProcessing
         }
-        console.log("MODEL", segModel)
         const selectedType = await localStorage.getItem("selectedType")
         if (selectedType == "addArea") {
-            const segmentationResponse = await segmentation(segUploadModel);
-            console.log(segmentationResponse, "segmentationResponse")
+            const segmentationResponse = await segmentation(segModel);
             setSegResponse(segmentationResponse.message)
+            setPercentage(100)
+            //After finishing the segmentation clear the inputs again.
+            setSelectedFile(null);
+            setFileName()
+            setPostProssesing('');
+            setAiModel('');
         }
         else if (selectedType == "upload") {
             const uploadSegmentationResponse = await upload_Segmentation(segUploadModel);
-            console.log(uploadSegmentationResponse, "uploadSegmentationResponse")
             setSegResponse(uploadSegmentationResponse.message)
+            setPercentage(100)
+            //After finishing the segmentation clear the inputs again.
+            setSelectedFile(null);
+            setFileName()
+            setPostProssesing('');
+            setAiModel('');
         }
-        else {
-            console.log("Please select Data source")
-        }
-        //After finishing the segmentation clear the inputs again.
-        setSelectedFile(null);
-        setFileName()
-        setPostProssesing('');
-        setAiModel('');
     }
 
     const onFileUpload = async (event) => {
-        console.log(event.target.files[0], "reachedHere");
-        var xxx = event.target.files[0];
+        var file = event.target.files[0];
         setFileName(event.target.files[0].name)
         setSelectedFile(event.target.files[0])
-        console.log(selectedFile);
         localStorage.setItem("selectedType", "upload")
-        console.log("re11")
-        // setSelectedType(2)
         // Create an object of formData
         const formData = new FormData();
 
         // Update the formData object
         formData.append(
             "file",
-            xxx,
-            xxx.name
+            file,
+            file.name
         );
 
-        console.log(selectedFile);
-        console.log(formData)
-        console.log("re12")
         const uploadedFile = await Upload(formData)
         var x = JSON.stringify(uploadedFile[1]["bbox"]);
-        console.log("[" + (x.replaceAll('[', "").replaceAll(']', "").replaceAll('\"', "")) + "]")
         var boundings = "[" + (x.replaceAll('[', "").replaceAll(']', "").replaceAll('\"', "")) + "]";
-        console.log(localStorage.getItem("Bbox"), "Bboxx")
-        // console.log(JSON.stringify(uploadedFile[1]["bbox"]),"uploadedFileResponse")
         localStorage.setItem("Bbox", boundings)
     };
     return (
@@ -168,8 +172,8 @@ export const HomePage = (props) => {
                 <ReactTooltip id="DataSource" place="top" effect="solid">
                     Choose one option for the Data source type.
                 </ReactTooltip>
+                <p style={{ marginBottom: 1, fontWeight: "bold", paddingTop: 10 }}>Add Area From Map</p>
                 <div style={{ display: "flex", flexDirection: "row" }}>
-
                     <Link to='/add-area'>
                         <Button variant="outlined"
                             startIcon={<AddCircleIcon />} >
@@ -189,7 +193,7 @@ export const HomePage = (props) => {
                                 Upload
                             </Button>
                         </label>
-                        <p style={{ marginLeft: 5 }}>{fileName}</p>
+                        <p style={{ marginLeft: 5, fontSize: 10 }}>{fileName}</p>
                         <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="Upload" />
                         <ReactTooltip id="Upload" place="top" effect="solid">Upload your (.TIF) file extension</ReactTooltip>
                     </div>
@@ -269,11 +273,14 @@ export const HomePage = (props) => {
                         Run processing
                     </Button>
                     : null}
-                <Button variant="outlined"
-                    startIcon={<RemoveCircleOutlineIcon />}
-                    onClick={handleClearSelection}>
-                    Clear selection
-                </Button>
+                <div style={{ paddingTop: 10 }}>
+                    <Button
+                        variant="outlined"
+                        startIcon={<RemoveCircleOutlineIcon />}
+                        onClick={handleClearSelection}>
+                        Clear selection
+                    </Button>
+                </div>
             </Grid>
             <Grid item xs={6} md={3}>
                 <Item style={{ marginBottom: 10, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
@@ -282,12 +289,26 @@ export const HomePage = (props) => {
                         <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="RunProject" />
                     </Button>
                 </Item>
+                {startProgress ?
+                    <div style={{ paddingTop: 8 }}>
+                        <ProgressBar now={percentage} />
+                        <Typography>
+                            AI works
+                        </Typography>
+                    </div>
+                    :
+                    null}
                 {segResponse === "Created!" ?
-                    <Link to='/map-overlay'>
-                        <Button variant="outlined">
-                            Thematic overlay
-                        </Button>
-                    </Link>
+                    <div style={{ paddingTop: 10 }}>
+                        <Typography>
+                            Thematic Layer
+                        </Typography>
+                        <Link to='/map-overlay'>
+                            <Button variant="outlined">
+                                Thematic overlay
+                            </Button>
+                        </Link>
+                    </div>
                     :
                     null}
             </Grid>
