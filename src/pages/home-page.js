@@ -291,7 +291,8 @@ export const HomePage = (props) => {
                     :
                     null}
             </Grid>
-        </Grid >
+            <a style={{ position: 'absolute', bottom: 20, right: 20, fontWeight: 'bold' }} href="./contact-us">Contact Us</a>
+        </Grid>
 
     );
 };
