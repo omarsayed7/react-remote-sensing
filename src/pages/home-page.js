@@ -71,7 +71,13 @@ export const HomePage = (props) => {
 
     const onSegmentation = async () => {
         const newHeight = localStorage.getItem("height")
+        const newWidth = localStorage.getItem("width")
+        if (newHeight > 1280  || newWidth > 1280) {
+            newHeight = newHeight/10
+            newWidth = newWidth/10
+        }
         console.log(newHeight, "newHeight")
+        console.log(newWidth, "newWidth")
         const segUploadModel = {
             "Bbox": bbox,
             "Width": 400,
@@ -81,15 +87,15 @@ export const HomePage = (props) => {
         }
         const segModel = {
             "Bbox": bbox,
-            "Width": parseInt(newHeight),
-            "Height": 400,
+            "Width": parseInt(newWidth),
+            "Height": parseInt(newHeight),
             "Algorithm": aiModel,
             "PostProcessing": postProcessing
         }
         console.log("MODEL", segModel)
         const selectedType = await localStorage.getItem("selectedType")
         if (selectedType == "addArea") {
-            const segmentationResponse = await segmentation(segUploadModel);
+            const segmentationResponse = await segmentation(segModel);
             console.log(segmentationResponse, "segmentationResponse")
             setSegResponse(segmentationResponse.message)
         }
