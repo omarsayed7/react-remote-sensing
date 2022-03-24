@@ -300,7 +300,7 @@ export const HomePage = (props) => {
                     <div style={{ paddingTop: 8 }}>
                         <ProgressBar now={percentage} />
                         <Typography>
-                            AI works
+                            Thematic layer is being generated.....
                         </Typography>
                     </div>
                     :
