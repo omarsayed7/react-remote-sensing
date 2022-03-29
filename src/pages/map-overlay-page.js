@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { MapContainer, TileLayer, ImageOverlay } from 'react-leaflet';
 import L from 'leaflet';
-import { fetchSegmentationMask, fetchUploadSegmentationMask } from '../services'
+import { fetchArchiveImage, fetchSegmentationMask, fetchUploadSegmentationMask } from '../services'
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -39,6 +39,14 @@ export class MapOverlayPage extends Component {
         }
         else if (selectedType == "upload") {
             const segmentationUploadMask = await fetchUploadSegmentationMask();
+            console.log("2HERE:", segmentationUploadMask)
+            const maskUploadURL = segmentationUploadMask.request.responseURL
+            console.log("2HERE222:", maskUploadURL)
+            // create an image
+            this.setState({ maskImage: maskUploadURL })
+        }
+        else if (selectedType == "archive") {
+            const segmentationUploadMask = await fetchArchiveImage();
             console.log("2HERE:", segmentationUploadMask)
             const maskUploadURL = segmentationUploadMask.request.responseURL
             console.log("2HERE222:", maskUploadURL)

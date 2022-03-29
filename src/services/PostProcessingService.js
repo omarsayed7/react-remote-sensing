@@ -51,5 +51,21 @@ export async function fetchSegmentationBoundingMask() {
         return err;
     })
 }
+export async function fetchArchiveImage(formData) {
+    let URL = `${API.ARCHIVE}`;
+    console.log(URL)
+    return await axios({
+        method: "get",
+        url: URL,
+        config: {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "content-Type": "image/jpeg",
+            },
+        },
+    }).catch(function (err) {
+        return err;
+    })
+}
 
 // .then(response => Buffer.from(response.data, 'binary').toString('base64'));
