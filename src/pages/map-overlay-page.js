@@ -3,6 +3,10 @@ import { MapContainer, TileLayer, ImageOverlay } from 'react-leaflet';
 import L from 'leaflet';
 import Modal from '@mui/material/Modal';
 import { fetchArchiveImage, fetchSegmentationMask, fetchUploadSegmentationMask } from '../services'
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+
 
 const ModalStyle = {
     position: 'absolute',
@@ -15,6 +19,9 @@ const ModalStyle = {
     boxShadow: 24,
     p: 4,
 };
+
+    
+
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconRetinaUrl:
@@ -34,7 +41,11 @@ export class MapOverlayPage extends Component {
         super(props);
         this.myRef = React.createRef();
         this.state = {
+            open: false,
             maskImage: '',
+            modalTitle: '',
+            modalDescription: '',
+            col_matrix: '',
             bounds: []
         }
     }
@@ -67,14 +78,40 @@ export class MapOverlayPage extends Component {
         } else
             console.log("please select type")
     }
+     handleOpen = (title, description) => {
+        this.setState({ modalTitle: "Colleration Matrix" })
+        // setmodalTitle(title)
+        this.setState({ modalDescription: localStorage.getItem("Col_Matrix") })
+        //setmodalDescription(description)
+        this.setState({ open: true })
+        //setOpen(true)
+    };
+    
+    handleClose = () => this.setState({ open: false });
 
     render() {
         const bBox = localStorage.getItem('Bbox').split("[")[1].split(']')[0].split(',')
-        const col_matrix = localStorage.getItem('Col_Matrix')
+        
         const BboxBounds = [[parseFloat(bBox[1]), parseFloat(bBox[0])], [parseFloat(bBox[3]), parseFloat(bBox[2])]]
         console.log(this.state, BboxBounds, "STATE")
         console.log(this.state.maskImage, "URL")
         return (
+            <div>
+                <Modal
+                open={this.state.open}
+                onClose={this.handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={ModalStyle}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        {this.state.modalTitle}
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        {this.state.modalDescription}
+                    </Typography>
+                </Box>
+            </Modal>
             <MapContainer center={[parseFloat(bBox[1]), parseFloat(bBox[0])]} zoom={13} zoomControl={false} style={{ height: "90vh" }} >
                 <TileLayer
                     // attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -88,6 +125,10 @@ export class MapOverlayPage extends Component {
                     opacity={0.5}
                 />
             </MapContainer>
+            
+            
+            <Button onClick={() => this.handleOpen(this.state.modalTitle, this.state.modalDescription)} style={{ color: "grey" }}>Show Colleration Matrix</Button>
+        </div>
         );
     }
 }

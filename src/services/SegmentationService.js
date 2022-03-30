@@ -39,13 +39,14 @@ export async function Upload(formData) {
     return res;
 }
 
-export async function Archive(formData) {
-    console.log(formData)
+export async function Archive(seg_model) {
+    console.log(seg_model)
     const res = await makeRequest(`${API.ARCHIVE}`, {
         method: "POST",
-        body: formData,
+        body: JSON.stringify(seg_model),
         headers: {
-            "Access-Control-Allow-Origin": "*"
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json"
 
         },
     });
