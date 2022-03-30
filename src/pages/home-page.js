@@ -18,7 +18,6 @@ import MenuItem from '@mui/material/MenuItem';
 
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
-import { Dropdown } from 'react-bootstrap';
 import Typography from '@mui/material/Typography';
 import { ProgressBar } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -111,7 +110,6 @@ export const HomePage = (props) => {
     // Handling Classification Object
     const [aiModel, setAiModel] = useState('');
     const [year, setYear] = useState('');
-    const [archiveImage, setarchiveImage] = useState('');
     const [postProcessing, setPostProssesing] = useState('')
     const [currentPostProcessing, setcurrentPostProssesing] = useState('')
     const [imgUrl, setImgUrl] = useState('')
@@ -183,7 +181,7 @@ export const HomePage = (props) => {
         const selectedType = await localStorage.getItem("selectedType")
         //localStorage.setItem("selectedType", "upload")
 
-        if (selectedType == "addArea") {
+        if (selectedType === "addArea") {
             const segmentationResponse = await segmentation(segModel);
             setSegResponse(segmentationResponse.message)
             setcurrentPostProssesing(postProcessing)
@@ -197,7 +195,7 @@ export const HomePage = (props) => {
             setPostProssesing('');
             setAiModel('');
         }
-        else if (selectedType == "upload") {
+        else if (selectedType === "upload") {
             const uploadSegmentationResponse = await upload_Segmentation(segUploadModel);
             setSegResponse(uploadSegmentationResponse.message)
             setcurrentPostProssesing(postProcessing)
@@ -211,16 +209,16 @@ export const HomePage = (props) => {
             setPostProssesing('');
             setAiModel('');
         }
-        else if (selectedType == "archive") {
+        else if (selectedType === "archive") {
             const archiveResponse = await Archive(archive);
             console.log(archiveResponse, "46546")
             setSegResponse(archiveResponse[0].message)
             console.log(archiveResponse[0].message, "3156465165")
             var y = JSON.stringify(archiveResponse[2]["bbox"]);
-            var col_matrix = JSON.stringify(archiveResponse[1]["col_matrix"]);
+            var corel_matrix = JSON.stringify(archiveResponse[1]["col_matrix"]);
             var boundings = "[" + (y.replaceAll('[', "").replaceAll(']', "").replaceAll('\"', "")) + "]";
             localStorage.setItem("Bbox", boundings)
-            localStorage.setItem("Col_Matrix", col_matrix)
+            localStorage.setItem("Corel_Matrix", corel_matrix)
             setcurrentPostProssesing("ShowOnMap")
             setPercentage(100)
             const archiveMask = await fetchArchiveImage();
@@ -258,7 +256,7 @@ export const HomePage = (props) => {
     const stringSplitter = (desc) => {
         return (
             desc.split("\n").map((i, key) => {
-                console.log(i, "ii")
+                
                 return (<Typography key={key}>{i}</Typography>);
             }))
     }
@@ -403,13 +401,13 @@ export const HomePage = (props) => {
                 <ReactTooltip id="RunProject" place="top" effect="solid">
                     Run Processing to run the AI model OR Choose Thematic overlay for showing the map
                 </ReactTooltip>
-                {aiModel != '' && postProcessing != '' && !!bbox ?
+                {aiModel !== '' && postProcessing !== '' && !!bbox ?
                     <Button variant="outlined"
                         onClick={onSegmentation}>
                         Run processing
                     </Button>
                     : null}
-                {aiModel != '' && year != '' ?
+                {aiModel !== '' && year !== '' ?
                     <Button variant="outlined"
                         onClick={onSegmentation}>
                         Show archived
@@ -454,15 +452,14 @@ export const HomePage = (props) => {
                     :
                     null}
                 {segResponse === "Created!" && currentPostProcessing === "Download" ?
-                    <div style={{ paddingTop: 10 }}>
+                    <div style={{ paddingTop: 10 }} >
                         <Typography>
                             Thematic Layer
                         </Typography>
-                        <Link to='/map-overlay'>
-                            <Button variant="outlined">
+                            <Button variant="outlined" href={imgUrl}>
                                 Download Thematic overlay
                             </Button>
-                        </Link>
+                        
                     </div>
                     :
                     null}

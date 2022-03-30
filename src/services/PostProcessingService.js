@@ -53,7 +53,6 @@ export async function fetchSegmentationBoundingMask() {
 }
 export async function fetchArchiveImage() {
     let URL = `${API.ARCHIVE}`;
-    // console.log(seg_model)
     console.log(URL)
     return await axios({
         method: "get",

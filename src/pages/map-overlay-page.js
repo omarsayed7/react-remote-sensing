@@ -44,7 +44,7 @@ export class MapOverlayPage extends Component {
             open: false,
             maskImage: '',
             modalTitle: '',
-            modalDescription: '',
+            modalDescription : [],
             col_matrix: '',
             bounds: []
         }
@@ -52,7 +52,7 @@ export class MapOverlayPage extends Component {
     async componentDidMount() {
         const selectedType = localStorage.getItem("selectedType")
         console.log("[INFO]", selectedType)
-        if (selectedType == "addArea") {
+        if (selectedType === "addArea") {
             const segmentationMask = await fetchSegmentationMask();
             console.log("HERE:", segmentationMask)
             const maskURL = segmentationMask.request.responseURL
@@ -60,7 +60,7 @@ export class MapOverlayPage extends Component {
             // create an image
             this.setState({ maskImage: maskURL })
         }
-        else if (selectedType == "upload") {
+        else if (selectedType === "upload") {
             const segmentationUploadMask = await fetchUploadSegmentationMask();
             console.log("2HERE:", segmentationUploadMask)
             const maskUploadURL = segmentationUploadMask.request.responseURL
@@ -68,7 +68,7 @@ export class MapOverlayPage extends Component {
             // create an image
             this.setState({ maskImage: maskUploadURL })
         }
-        else if (selectedType == "archive") {
+        else if (selectedType === "archive") {
             const archiveMask = await fetchArchiveImage();
             console.log("2HERE:", archiveMask)
             const archiveURL = archiveMask.request.responseURL
@@ -78,21 +78,18 @@ export class MapOverlayPage extends Component {
         } else
             console.log("please select type")
     }
-    handleOpen = (title, description) => {
-        this.setState({ modalTitle: "Colleration Matrix" })
-        // setmodalTitle(title)
-        this.setState({ modalDescription: localStorage.getItem("Col_Matrix") })
-        //setmodalDescription(description)
+    handleOpen = () => {
+        this.setState({ modalTitle: "Correlation Matrix" })
+        this.setState({ modalDescription: JSON.parse(localStorage.getItem("Corel_Matrix")) })
         this.setState({ open: true })
-        //setOpen(true)
     };
 
     handleClose = () => this.setState({ open: false });
 
     stringSplitter = (desc) => {
         return (
-            desc.split("\n").map((i, key) => {
-                console.log(i, "ii")
+            desc.map((i, key) => {
+                
                 return (<Typography key={key}>{i}</Typography>);
             }))
     }
@@ -133,7 +130,7 @@ export class MapOverlayPage extends Component {
                 </MapContainer>
 
 
-                <Button onClick={() => this.handleOpen(this.state.modalTitle, this.state.modalDescription)} style={{ color: "grey" }}>Show Colleration Matrix</Button>
+                <Button variant = "outlined" onClick={() => this.handleOpen(this.state.modalTitle, this.state.modalDescription)} style={{ color: "grey" }}>Show Correlation Matrix</Button>
             </div>
         );
     }
