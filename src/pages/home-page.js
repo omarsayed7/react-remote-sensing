@@ -22,29 +22,29 @@ import { Dropdown } from 'react-bootstrap';
 import Typography from '@mui/material/Typography';
 import { ProgressBar } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { segmentation, Upload, upload_Segmentation, fetchSegmentationMask,fetchUploadSegmentationMask, fetchArchiveImage, Archive } from '../services'
+import { segmentation, Upload, upload_Segmentation, fetchSegmentationMask, fetchUploadSegmentationMask, fetchArchiveImage, Archive } from '../services'
 
 //const data_tooltip = "Leaflet is an open source JavaScript library used to build web mapping applications. First released in 2011, it supports most mobile and desktop platforms, supporting HTML5 and CSS3. /n Leaflet allows developers without a GIS background to very easily display tiled web maps hosted on a public server, with optional tiled overlays. /n It can load feature data from GeoJSON files, style it and create interactive layers, such as markers with popups when clicked./n It is developed by Vladimir Agafonkin, who joined Mapbox in 2013./n Feature:/n Leaflet supports Web Map Service (WMS) layers, GeoJSON layers, Vector layers and Tile layers natively. Many other types of layers are supported via plugins./n /nLike other web map libraries, the basic display model implemented by Leaflet is one basemap, plus zero or more translucent overlays, with zero or more vector objects displayed on top./nElements:/n The major Leaflet object types are:/n /n Raster types (TileLayer and ImageOverlay)/n Vector types (Path, Polygon, and specific types such as rectangle)/n Grouped types (LayerGroup, FeatureGroup and GeoJSON) /n Controls (Zoom, Layers, etc.)"
-const data_tooltip = `Leaflet is an open source JavaScript library used to build web mapping applications. First released in 2011, it supports most mobile and desktop platforms, supporting HTML5 and CSS3.\n\t
-\n\t
-Leaflet allows developers without a GIS background to very easily display tiled web maps hosted on a public server, with optional tiled overlays. \n\t
-It can load feature data from GeoJSON files, style it and create interactive layers, such as markers with popups when clicked.\n\t
-\n\t
-It is developed by Vladimir Agafonkin, who joined Mapbox in 2013.\n\t
-\n\t
-\n\t
-\n\tFeature:
-Leaflet supports Web Map Service (WMS) layers, GeoJSON layers, Vector layers and Tile layers natively. Many other types of layers are supported via plugins.\n\t
-\n\t
-Like other web map libraries, the basic display model implemented by Leaflet is one basemap, plus zero or more translucent overlays, with zero or more vector objects displayed on top.\n\t
-\n\t
-\n\t
-Elements:\n\t
-The major Leaflet object types are:\n\t
-\n\t
-Raster types (TileLayer and ImageOverlay)\n\t
-Vector types (Path, Polygon, and specific types such as rectangle) \n\t
-Grouped types (LayerGroup, FeatureGroup and GeoJSON) \n\t
+const data_tooltip = `Leaflet is an open source JavaScript library used to build web mapping applications. First released in 2011, it supports most mobile and desktop platforms, supporting HTML5 and CSS3.\n
+\n
+Leaflet allows developers without a GIS background to very easily display tiled web maps hosted on a public server, with optional tiled overlays. \n
+It can load feature data from GeoJSON files, style it and create interactive layers, such as markers with popups when clicked.\n
+\n
+It is developed by Vladimir Agafonkin, who joined Mapbox in 2013.\n
+\n
+\n
+\n Feature:
+Leaflet supports Web Map Service (WMS) layers, GeoJSON layers, Vector layers and Tile layers natively. Many other types of layers are supported via plugins.\n
+\n
+Like other web map libraries, the basic display model implemented by Leaflet is one basemap, plus zero or more translucent overlays, with zero or more vector objects displayed on top.\n
+\n
+\n
+Elements:\n
+The major Leaflet object types are:\n
+\n
+Raster types (TileLayer and ImageOverlay)\n
+Vector types (Path, Polygon, and specific types such as rectangle) \n
+Grouped types (LayerGroup, FeatureGroup and GeoJSON) \n
 Controls (Zoom, Layers, etc.)`
 const aimodel_tooltip = `AI models (machine learning and deep learning) help automate logical inference and decision-making in business intelligence.
 This methodology helps make analytics smarter and faster, with the ability to scale alongside ever-increasing amounts of data.
@@ -105,7 +105,7 @@ export const HomePage = (props) => {
         setmodalDescription(description)
         setOpen(true)
     };
-    
+
     const handleClose = () => setOpen(false);
 
     // Handling Classification Object
@@ -141,11 +141,11 @@ export const HomePage = (props) => {
     };
     const handleDropDownChange = (event) => {
         setYear(event.target.value)
-        localStorage.setItem('selectedType',"archive")
-        localStorage.setItem('selectedYear',event.target.value)
+        localStorage.setItem('selectedType', "archive")
+        localStorage.setItem('selectedYear', event.target.value)
         console.log(localStorage.getItem("selectedType"))
     }
-    
+
     const handleClearSelection = (event) => {
         setPostProssesing('');
         setAiModel('');
@@ -167,7 +167,7 @@ export const HomePage = (props) => {
         const segUploadModel = {
             "Algorithm": aiModel,
             "PostProcessing": postProcessing
-            
+
         }
         const segModel = {
             "Bbox": bbox,
@@ -190,7 +190,7 @@ export const HomePage = (props) => {
             setPercentage(100)
             const segmentationMask = await fetchSegmentationMask();
             setImgUrl(segmentationMask.request.responseURL)
-            console.log(segmentationMask,"5165184165165")
+            console.log(segmentationMask, "5165184165165")
             //After finishing the segmentation clear the inputs again.
             setSelectedFile(null);
             setFileName()
@@ -204,7 +204,7 @@ export const HomePage = (props) => {
             setPercentage(100)
             const segmentationMask = await fetchUploadSegmentationMask();
             setImgUrl(segmentationMask.request.responseURL)
-            console.log(segmentationMask,"5165184165165")
+            console.log(segmentationMask, "5165184165165")
             //After finishing the segmentation clear the inputs again.
             setSelectedFile(null);
             setFileName()
@@ -213,9 +213,9 @@ export const HomePage = (props) => {
         }
         else if (selectedType == "archive") {
             const archiveResponse = await Archive(archive);
-            console.log(archiveResponse,"46546")
+            console.log(archiveResponse, "46546")
             setSegResponse(archiveResponse[0].message)
-            console.log(archiveResponse[0].message,"3156465165")
+            console.log(archiveResponse[0].message, "3156465165")
             var y = JSON.stringify(archiveResponse[2]["bbox"]);
             var col_matrix = JSON.stringify(archiveResponse[1]["col_matrix"]);
             var boundings = "[" + (y.replaceAll('[', "").replaceAll(']', "").replaceAll('\"', "")) + "]";
@@ -225,7 +225,7 @@ export const HomePage = (props) => {
             setPercentage(100)
             const archiveMask = await fetchArchiveImage();
             setImgUrl(archiveMask.request.responseURL)
-            console.log(archiveMask,"51111111165")
+            console.log(archiveMask, "51111111165")
             // //After finishing the segmentation clear the inputs again.
             setPostProssesing('');
             setAiModel('');
@@ -252,8 +252,16 @@ export const HomePage = (props) => {
         var x = JSON.stringify(uploadedFile[1]["bbox"]);
         var boundings = "[" + (x.replaceAll('[', "").replaceAll(']', "").replaceAll('\"', "")) + "]";
         localStorage.setItem("Bbox", boundings)
-        
+
     };
+
+    const stringSplitter = (desc) => {
+        return (
+            desc.split("\n").map((i, key) => {
+                console.log(i, "ii")
+                return (<Typography key={key}>{i}</Typography>);
+            }))
+    }
     return (
         <Grid container spacing={8} padding={10}>
             <div>
@@ -267,13 +275,7 @@ export const HomePage = (props) => {
                         <Typography id="modal-modal-title" variant="h6" component="h2">
                             {modalTitle}
                         </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                          { `heloooomsdsn
-                           ksdfksf,sdvkl
-                           sdkvskvks
-                           
-                           cclksndjvnsjkv`}
-                        </Typography>
+                        {stringSplitter(modalDescription)}
                     </Box>
                 </Modal>
             </div>
@@ -315,21 +317,21 @@ export const HomePage = (props) => {
                     </div>
                 </div>
                 <div>
-                <p style={{ marginLeft: 5, fontSize: 10 }}></p>
-                <FormControl fullWidth>
-                <InputLabel id="drop-down-menu">Select Classification Year</InputLabel>
-                    <Select
-                        labelId="drop-down-menu"
-                        defaultValue=""
-                        id="drop-down-select"
-                        label="Year"
-                        onChange={handleDropDownChange}
-                    >
-                        <MenuItem value={'2015'}>2015</MenuItem>
-                        <MenuItem value={'2016'}>2016</MenuItem>
-                        <MenuItem value={'2019'}>2019</MenuItem>
-                        <MenuItem value={'2021'}>2021</MenuItem>
-                    </Select>
+                    <p style={{ marginLeft: 5, fontSize: 10 }}></p>
+                    <FormControl fullWidth>
+                        <InputLabel id="drop-down-menu">Select Classification Year</InputLabel>
+                        <Select
+                            labelId="drop-down-menu"
+                            defaultValue=""
+                            id="drop-down-select"
+                            label="Year"
+                            onChange={handleDropDownChange}
+                        >
+                            <MenuItem value={'2015'}>2015</MenuItem>
+                            <MenuItem value={'2016'}>2016</MenuItem>
+                            <MenuItem value={'2019'}>2019</MenuItem>
+                            <MenuItem value={'2021'}>2021</MenuItem>
+                        </Select>
                     </FormControl>
                 </div>
                 <div style={{ paddingTop: '5%' }}>
@@ -407,7 +409,7 @@ export const HomePage = (props) => {
                         Run processing
                     </Button>
                     : null}
-                    {aiModel != '' && year != '' ?
+                {aiModel != '' && year != '' ?
                     <Button variant="outlined"
                         onClick={onSegmentation}>
                         Show archived
@@ -438,7 +440,7 @@ export const HomePage = (props) => {
                     </div>
                     :
                     null}
-                {segResponse === "Created!" && currentPostProcessing === 'ShowOnMap'?
+                {segResponse === "Created!" && currentPostProcessing === 'ShowOnMap' ?
                     <div style={{ paddingTop: 10 }}>
                         <Typography>
                             Thematic Layer
@@ -451,7 +453,7 @@ export const HomePage = (props) => {
                     </div>
                     :
                     null}
-                    {segResponse === "Created!" && currentPostProcessing === "Download" ?
+                {segResponse === "Created!" && currentPostProcessing === "Download" ?
                     <div style={{ paddingTop: 10 }}>
                         <Typography>
                             Thematic Layer
@@ -464,7 +466,7 @@ export const HomePage = (props) => {
                     </div>
                     :
                     null}
-                    
+
             </Grid>
             <a style={{ position: 'absolute', bottom: 20, right: 20, fontWeight: 'bold' }} href="./contact-us">Contact Us</a>
         </Grid>

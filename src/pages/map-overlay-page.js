@@ -20,7 +20,7 @@ const ModalStyle = {
     p: 4,
 };
 
-    
+
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -78,7 +78,7 @@ export class MapOverlayPage extends Component {
         } else
             console.log("please select type")
     }
-     handleOpen = (title, description) => {
+    handleOpen = (title, description) => {
         this.setState({ modalTitle: "Colleration Matrix" })
         // setmodalTitle(title)
         this.setState({ modalDescription: localStorage.getItem("Col_Matrix") })
@@ -86,49 +86,55 @@ export class MapOverlayPage extends Component {
         this.setState({ open: true })
         //setOpen(true)
     };
-    
+
     handleClose = () => this.setState({ open: false });
+
+    stringSplitter = (desc) => {
+        return (
+            desc.split("\n").map((i, key) => {
+                console.log(i, "ii")
+                return (<Typography key={key}>{i}</Typography>);
+            }))
+    }
 
     render() {
         const bBox = localStorage.getItem('Bbox').split("[")[1].split(']')[0].split(',')
-        
+
         const BboxBounds = [[parseFloat(bBox[1]), parseFloat(bBox[0])], [parseFloat(bBox[3]), parseFloat(bBox[2])]]
         console.log(this.state, BboxBounds, "STATE")
         console.log(this.state.maskImage, "URL")
         return (
             <div>
                 <Modal
-                open={this.state.open}
-                onClose={this.handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box sx={ModalStyle}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                        {this.state.modalTitle}
-                    </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        {this.state.modalDescription}
-                    </Typography>
-                </Box>
-            </Modal>
-            <MapContainer center={[parseFloat(bBox[1]), parseFloat(bBox[0])]} zoom={13} zoomControl={false} style={{ height: "90vh" }} >
-                <TileLayer
-                    // attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                    // url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-                    url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-                    attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-                />
-                <ImageOverlay
-                    bounds={BboxBounds}
-                    url={this.state.maskImage}
-                    opacity={0.5}
-                />
-            </MapContainer>
-            
-            
-            <Button onClick={() => this.handleOpen(this.state.modalTitle, this.state.modalDescription)} style={{ color: "grey" }}>Show Colleration Matrix</Button>
-        </div>
+                    open={this.state.open}
+                    onClose={this.handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={ModalStyle}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            {this.state.modalTitle}
+                        </Typography>
+                        {this.stringSplitter(this.state.modalDescription)}
+                    </Box>
+                </Modal>
+                <MapContainer center={[parseFloat(bBox[1]), parseFloat(bBox[0])]} zoom={13} zoomControl={false} style={{ height: "90vh" }} >
+                    <TileLayer
+                        // attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        // url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+                        url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                        attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                    />
+                    <ImageOverlay
+                        bounds={BboxBounds}
+                        url={this.state.maskImage}
+                        opacity={0.5}
+                    />
+                </MapContainer>
+
+
+                <Button onClick={() => this.handleOpen(this.state.modalTitle, this.state.modalDescription)} style={{ color: "grey" }}>Show Colleration Matrix</Button>
+            </div>
         );
     }
 }
