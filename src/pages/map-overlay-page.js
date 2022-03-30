@@ -1,8 +1,20 @@
 import React, { Component } from 'react';
 import { MapContainer, TileLayer, ImageOverlay } from 'react-leaflet';
 import L from 'leaflet';
+import Modal from '@mui/material/Modal';
 import { fetchArchiveImage, fetchSegmentationMask, fetchUploadSegmentationMask } from '../services'
 
+const ModalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 800,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconRetinaUrl:
@@ -46,18 +58,19 @@ export class MapOverlayPage extends Component {
             this.setState({ maskImage: maskUploadURL })
         }
         else if (selectedType == "archive") {
-            const segmentationUploadMask = await fetchArchiveImage();
-            console.log("2HERE:", segmentationUploadMask)
-            const maskUploadURL = segmentationUploadMask.request.responseURL
-            console.log("2HERE222:", maskUploadURL)
+            const archiveMask = await fetchArchiveImage();
+            console.log("2HERE:", archiveMask)
+            const archiveURL = archiveMask.request.responseURL
+            console.log("2HERE222:", archiveURL)
             // create an image
-            this.setState({ maskImage: maskUploadURL })
+            this.setState({ maskImage: archiveURL })
         } else
             console.log("please select type")
     }
 
     render() {
         const bBox = localStorage.getItem('Bbox').split("[")[1].split(']')[0].split(',')
+        const col_matrix = localStorage.getItem('Col_Matrix')
         const BboxBounds = [[parseFloat(bBox[1]), parseFloat(bBox[0])], [parseFloat(bBox[3]), parseFloat(bBox[2])]]
         console.log(this.state, BboxBounds, "STATE")
         console.log(this.state.maskImage, "URL")

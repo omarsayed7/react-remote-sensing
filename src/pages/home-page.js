@@ -18,7 +18,7 @@ import { Dropdown } from 'react-bootstrap';
 import Typography from '@mui/material/Typography';
 import { ProgressBar } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { segmentation, Upload, upload_Segmentation, fetchSegmentationMask,fetchUploadSegmentationMask, fetchArchiveImage } from '../services'
+import { segmentation, Upload, upload_Segmentation, fetchSegmentationMask,fetchUploadSegmentationMask, fetchArchiveImage, Archive } from '../services'
 
 //const data_tooltip = "Leaflet is an open source JavaScript library used to build web mapping applications. First released in 2011, it supports most mobile and desktop platforms, supporting HTML5 and CSS3. /n Leaflet allows developers without a GIS background to very easily display tiled web maps hosted on a public server, with optional tiled overlays. /n It can load feature data from GeoJSON files, style it and create interactive layers, such as markers with popups when clicked./n It is developed by Vladimir Agafonkin, who joined Mapbox in 2013./n Feature:/n Leaflet supports Web Map Service (WMS) layers, GeoJSON layers, Vector layers and Tile layers natively. Many other types of layers are supported via plugins./n /nLike other web map libraries, the basic display model implemented by Leaflet is one basemap, plus zero or more translucent overlays, with zero or more vector objects displayed on top./nElements:/n The major Leaflet object types are:/n /n Raster types (TileLayer and ImageOverlay)/n Vector types (Path, Polygon, and specific types such as rectangle)/n Grouped types (LayerGroup, FeatureGroup and GeoJSON) /n Controls (Zoom, Layers, etc.)"
 const data_tooltip = `Leaflet is an open source JavaScript library used to build web mapping applications. First released in 2011, it supports most mobile and desktop platforms, supporting HTML5 and CSS3.\n
@@ -137,6 +137,7 @@ export const HomePage = (props) => {
     const handleClearSelection = (event) => {
         setPostProssesing('');
         setAiModel('');
+        setYear('');
     };
 
     const onSegmentation = async () => {
@@ -198,8 +199,18 @@ export const HomePage = (props) => {
             setPostProssesing('');
             setAiModel('');
         }
-        const archiveImage = await fetchArchiveImage(archive);
-        setarchiveImage(archiveImage.request.responseURL)
+        else if (selectedType == "archive") {
+            const archiveResponse = await Archive(archive);
+            setSegResponse(archiveResponse.message)
+            setPercentage(100)
+            const archiveMask = await fetchArchiveImage();
+            setImgUrl(archiveMask.request.responseURL)
+            console.log(archiveMask,"51111111165")
+            //After finishing the segmentation clear the inputs again.
+            setPostProssesing('');
+            setAiModel('');
+            setYear('');
+        }
     }
 
     const onFileUpload = async (event) => {
@@ -221,6 +232,13 @@ export const HomePage = (props) => {
         var x = JSON.stringify(uploadedFile[1]["bbox"]);
         var boundings = "[" + (x.replaceAll('[', "").replaceAll(']', "").replaceAll('\"', "")) + "]";
         localStorage.setItem("Bbox", boundings)
+
+        const archivedFile = await Archive(formData)
+        var y = JSON.stringify(archivedFile[1]["bbox"]);
+        var col_matrix = JSON.stringify(archivedFile[0]["col_matrix"]);
+        var boundings = "[" + (y.replaceAll('[', "").replaceAll(']', "").replaceAll('\"', "")) + "]";
+        localStorage.setItem("Bbox", boundings)
+        localStorage.setItem("Col_Matrix", col_matrix)
     };
     return (
         <Grid container spacing={8} padding={10}>
@@ -361,6 +379,13 @@ export const HomePage = (props) => {
                         onClick={onSegmentation}>
                         Run processing
                     </Button>
+                    : null}
+                    {aiModel != '' && year != '' && !!bbox ?
+                    <Link to='/map-overlay'>
+                    <Button variant="outlined">
+                        Show archived
+                    </Button>
+                    </Link>
                     : null}
                 <div style={{ paddingTop: 10 }}>
                     <Button
