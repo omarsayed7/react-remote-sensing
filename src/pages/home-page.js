@@ -13,7 +13,11 @@ import ReactTooltip from "react-tooltip";
 import { MdInfo } from "@react-icons/all-files/md/MdInfo"
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import { DropdownButton } from 'react-bootstrap';
+import FormControl from '@mui/material/FormControl';
+import MenuItem from '@mui/material/MenuItem';
+
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
 import { Dropdown } from 'react-bootstrap';
 import Typography from '@mui/material/Typography';
 import { ProgressBar } from 'react-bootstrap';
@@ -101,6 +105,7 @@ export const HomePage = (props) => {
         setmodalDescription(description)
         setOpen(true)
     };
+    
     const handleClose = () => setOpen(false);
 
     // Handling Classification Object
@@ -134,6 +139,13 @@ export const HomePage = (props) => {
     const handleChangePostProcessing = (event) => {
         setPostProssesing(event.target.value);
     };
+    const handleDropDownChange = (event) => {
+        setYear(event.target.value)
+        localStorage.setItem('selectedType',"archive")
+        localStorage.setItem('selectedYear',event.target.value)
+        console.log(event.target.value)
+    }
+    
     const handleClearSelection = (event) => {
         setPostProssesing('');
         setAiModel('');
@@ -201,6 +213,7 @@ export const HomePage = (props) => {
         }
         else if (selectedType == "archive") {
             const archiveResponse = await Archive(archive);
+            console.log(archiveResponse,"46546")
             setSegResponse(archiveResponse.message)
             setPercentage(100)
             const archiveMask = await fetchArchiveImage();
@@ -298,19 +311,27 @@ export const HomePage = (props) => {
                 </div>
                 <div>
                 <p style={{ marginLeft: 5, fontSize: 10 }}>{fileName}</p>
-                <DropdownButton id="dropdown-basic-button" title="Select year of classification">
-                <Dropdown.Item onSelect={() =>setYear('2015')}href="#/action-1">2015</Dropdown.Item>
-                <Dropdown.Item onSelect={() =>setYear('2016')}href="#/action-2">2016</Dropdown.Item>
-                <Dropdown.Item onSelect={() =>setYear('2019')} href="#/action-3">2019</Dropdown.Item>
-                <Dropdown.Item onSelect={() =>setYear('2021')} href="#/action-4">2021</Dropdown.Item>
-                </DropdownButton>
+                <FormControl fullWidth>
+                <InputLabel id="drop-down-menu">Select Classification Year</InputLabel>
+                    <Select
+                        labelId="drop-down-menu"
+                        id="drop-down-select"
+                        label="Year"
+                        onChange={handleDropDownChange}
+                    >
+                        <MenuItem value={"2015"}>2015</MenuItem>
+                        <MenuItem value={"2016"}>2016</MenuItem>
+                        <MenuItem value={"2019"}>2019</MenuItem>
+                        <MenuItem value={"2021"}>2021</MenuItem>
+                    </Select>
+                    </FormControl>
                 </div>
                 <div style={{ paddingTop: '5%' }}>
                     <p style={{ marginBottom: -5 }}> USGS for download free images</p>
                     <div style={{ display: "flex", flexDirection: "row", alignContent: "center" }}>
                         <a href="https://earthexplorer.usgs.gov/" target="_blank">Click here</a>
                         <MdInfo style={{ padding: 5 }} size={20} data-tip data-for="TIFFiles" />
-                        <ReactTooltip id="TIFFiles" place="top" effect="solid">opensource website to download free sattelite image</ReactTooltip>
+                        <ReactTooltip id="TIFFiles" place="top" effect="solid">Opensource website to download free sattelite image</ReactTooltip>
                     </div>
                     <p style={{ marginBottom: -5 }}> OpenstreetMaps</p>
                     <div style={{ display: "flex", flexDirection: "row", alignContent: "center" }}>
@@ -380,9 +401,10 @@ export const HomePage = (props) => {
                         Run processing
                     </Button>
                     : null}
-                    {aiModel != '' && year != '' && !!bbox ?
+                    {aiModel != '' && year != '' ?
                     <Link to='/map-overlay'>
-                    <Button variant="outlined">
+                    <Button variant="outlined"
+                        onClick={onSegmentation}>
                         Show archived
                     </Button>
                     </Link>
