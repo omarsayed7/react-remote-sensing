@@ -15,7 +15,6 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
-
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
@@ -466,6 +465,8 @@ export const HomePage = (props) => {
 
             </Grid>
             <a style={{ position: 'absolute', bottom: 20, right: 20, fontWeight: 'bold' }} href="./contact-us">Contact Us</a>
+            <a style={{ position: 'absolute', bottom: 50, right: 20, fontWeight: 'bold' }} href="./sign-in-page">Sign-In</a>
+            <a style={{ position: 'absolute', bottom: 80, right: 20, fontWeight: 'bold' }} href="./sign-up-page">Sign-Up</a>
         </Grid>
 
     );
