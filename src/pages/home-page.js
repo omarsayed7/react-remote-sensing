@@ -273,7 +273,7 @@ export const HomePage = (props) => {
     }
     return (
         <Grid container spacing={1} sx={{ backgroundColor: 'white', display: 'felx', flexDirection: 'row' }}>
-            <div style={{ flex: 1, flexDirection: "column", display: "flex" }}>
+            <div style={{ width: '100%',flex: 1, flexDirection: "column", display: "flex" }}>
                 <HeaderComponent islogged={true} backgroundColor={'blue'} textColor={'white'} />
             </div>
             <div>
