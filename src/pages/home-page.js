@@ -273,8 +273,8 @@ export const HomePage = (props) => {
     }
     return (
         <Grid container spacing={1} sx={{ backgroundColor: 'white', display: 'felx', flexDirection: 'row' }}>
-            <div style={{ width: '100%',flex: 1, flexDirection: "column", display: "flex" }}>
-                <HeaderComponent islogged={true} backgroundColor={'blue'} textColor={'white'} />
+            <div style={{ width: '100%', flex: 1, flexDirection: "column", display: "flex" }}>
+                <HeaderComponent islogged={true} backgroundColor={'blue'} iscontacted={true} isabout={true} textColor={'white'} />
             </div>
             <div>
                 <Modal
@@ -291,7 +291,7 @@ export const HomePage = (props) => {
                     </Box>
                 </Modal>
             </div>
-            <Grid item md={3.1} sx={{ backgroundColor: 'blue', height: '91.1vh' }}>
+            <Grid item md={4} sx={{ backgroundColor: 'blue', height: '91.1vh' }}>
                 <div style={{ display: 'felx', flexDirection: 'row' }}>
                     <Button style={{ fontWeight: 'bold', color: "white", marginRight: "5" }}
                         endIcon={<ArrowForwardIosIcon
@@ -308,6 +308,15 @@ export const HomePage = (props) => {
                         onClick={hadnleShowDlModels}
                     >
                         Buildings
+                    </Button>
+                </div>
+                <div style={{ display: 'felx', flexDirection: 'row' }}>
+                    <Button style={{ fontWeight: 'bold', color: "white", marginRight: "5" }}
+                        endIcon={<ArrowForwardIosIcon
+                            style={{ marginLeft: "180px" }} />}
+                        href="/"
+                    >
+                        Logout
                     </Button>
                 </div>
             </Grid>
