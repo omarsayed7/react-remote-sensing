@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { HeaderComponent } from "../components/header-component"
-
+import { signUpService } from "../services"
 const theme = createTheme({
     status: {
         danger: '#e53e3e',
@@ -49,13 +49,7 @@ export const SignUpPage = () => {
     };
     const handleClose = () => setOpen(false);
 
-    const signUpData = {
-        "FirstName": firstName,
-        "LastName": lastName,
-        "Username": username,
-        "Email": email,
-        "Password": password
-    }
+
     const onChangeFirstName = (text) => {
         setFirstName(text.target.value)
     }
@@ -74,8 +68,15 @@ export const SignUpPage = () => {
     const onChangeRePassword = (text) => {
         setRePassword(text.target.value)
     }
-    const onSubmit = () => {
-        const signUpResponse = await Sign_Up(signUpData);
+    const onSubmit = async () => {
+        const signUpData = {
+            "FirstName": firstName,
+            "LastName": lastName,
+            "Username": username,
+            "Email": email,
+            "Password": password
+        }
+        const signUpResponse = await signUpService(signUpData);
 
     }
 

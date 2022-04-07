@@ -3,7 +3,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { HeaderComponent } from "../components/header-component"
-import { Sign_Up } from "../services/AccountServices";
+import { signInService } from "../services";
 
 const theme = createTheme({
     status: {
@@ -20,10 +20,7 @@ const theme = createTheme({
         },
     },
 });
-const signInData = {
-    "Username": username,
-    "Password": password
-}
+
 export const SignInPage = () => {
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
@@ -34,11 +31,15 @@ export const SignInPage = () => {
     const onChangePassword = (text) => {
         setPassword(text.target.value)
     }
-    const onSubmit = () => {
-        const signInResponse = await Sign_In(signInData);
+    const onSubmit = async () => {
+        const signInData = {
+            "Username": username,
+            "Password": password
+        }
+        const signInResponse = await signInService(signInData);
     }
 
-    
+
     return (
         <div >
             <HeaderComponent showBackButton={true} islogged={false} iscontacted={false} isabout={false} backgroundColor={'blue'} textColor={'white'} />

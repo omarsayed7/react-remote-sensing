@@ -2,7 +2,7 @@ import API from "./APIs";
 import { makeRequest } from "../util";
 
 
-export async function Contact_Us(contact_us_data) {
+export async function contactUsService(contact_us_data) {
     console.log(contact_us_data)
     const res = await makeRequest(`${API.CONTACT_US}`, {
         method: "POST",

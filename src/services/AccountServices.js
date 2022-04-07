@@ -1,7 +1,7 @@
 import API from "./APIs";
 import { makeRequest } from "../util";
 
-export async function Sing_In(signin_data) {
+export async function signInService(signin_data) {
     console.log(signin_data)
     const res = await makeRequest(`${API.SEGMENTATION_API_URL}`, {
         method: "POST",
@@ -13,7 +13,7 @@ export async function Sing_In(signin_data) {
     });
     return res
 }
-export async function Sign_Up(signup_data) {
+export async function signUpService(signup_data) {
     console.log(signup_data)
     const res = await makeRequest(`${API.SIGN_UP}`, {
         method: "POST",
