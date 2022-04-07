@@ -51,22 +51,22 @@ export const SignUpPage = () => {
 
 
     const onChangeFirstName = (text) => {
-        setFirstName(text)
+        setFirstName(text.target.value)
     }
     const onChangeLastName = (text) => {
-        setLastName(text)
+        setLastName(text.target.value)
     }
     const onChangeUserName = (text) => {
-        setUserName(text)
+        setUserName(text.target.value)
     }
     const onChangeEmail = (text) => {
-        setEmail(text)
+        setEmail(text.target.value)
     }
     const onChangePassword = (text) => {
-        setPassword(text)
+        setPassword(text.target.value)
     }
     const onChangeRePassword = (text) => {
-        setRePassword(text)
+        setRePassword(text.target.value)
     }
     const passCheck = () => {
         console.log(password, "password")

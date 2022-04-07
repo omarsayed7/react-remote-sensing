@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -20,22 +20,22 @@ const theme = createTheme({
     },
 });
 export const ContactUsPage = () => {
-    const [firstName, setFirstName] = useState();
-    const [lastName, setLastName] = useState();
-    const [email, setEmail] = useState();
-    const [helpMessage, setHelpMessage] = useState();
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [helpMessage, setHelpMessage] = useState("");
 
     const onChangeFirstName = (text) => {
-        setFirstName(text)
+        setFirstName(text.target.value)
     }
     const onChangeLastName = (text) => {
-        setLastName(text)
+        setLastName(text.target.value)
     }
     const onChangeEmail = (text) => {
-        setEmail(text)
+        setEmail(text.target.value)
     }
     const onChangeHelpMessage = (text) => {
-        setHelpMessage(text)
+        setHelpMessage(text.target.value)
     }
 
     return (
@@ -51,6 +51,7 @@ export const ContactUsPage = () => {
                 <div style={{ backgroundColor: 'white', paddingLeft: "20vh" }}>
                     <div style={{ display: 'flex', flexDirection: 'row', alignContent: 'space-between' }}>
                         <TextField
+                            id="first-name"
                             variant="outlined"
                             onChange={onChangeFirstName}
                             value={firstName}
@@ -58,6 +59,7 @@ export const ContactUsPage = () => {
                             label={"First Name"}
                         />
                         <TextField
+                            id="last-name"
                             variant="outlined"
                             onChange={onChangeLastName}
                             value={lastName}
@@ -67,6 +69,7 @@ export const ContactUsPage = () => {
                     </div>
                     <div style={{ display: 'flex', marginTop: '20%', width: "90%", height: 10 }}>
                         <TextField
+                            id="email"
                             variant="outlined"
                             onChange={onChangeEmail}
                             value={email}
@@ -78,6 +81,7 @@ export const ContactUsPage = () => {
                         <TextField
                             multiline
                             rows={4}
+                            id="message"
                             variant="outlined"
                             onChange={onChangeHelpMessage}
                             value={helpMessage}

@@ -24,10 +24,10 @@ export const SignInPage = () => {
     const [password, setPassword] = useState('');
 
     const onChangeUserName = (text) => {
-        setUserName(text)
+        setUserName(text.target.value)
     }
     const onChangePassword = (text) => {
-        setPassword(text)
+        setPassword(text.target.value)
     }
     return (
         <div >
