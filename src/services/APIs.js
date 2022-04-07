@@ -5,7 +5,7 @@ export default {
     UPLOAD_SEGMENTATION_API_URL: `${baseUrl}/api/segmentation-upload`,
     UPLOAD_FILE: `${baseUrl}/api/upload-file`,
     ARCHIVE: `${baseUrl}/api/archive`,
-    SIGN_IN: `${baseUrl}/api/sign_in`,
-    SIGN_UP: `${baseUrl}/api/sign_up`,
-    CONTACT_US: `${baseUrl}/api/contact_us`
+    SIGN_IN: `${baseUrl}/api/sign-in`,
+    SIGN_UP: `${baseUrl}/api/sign-up`,
+    CONTACT_US: `${baseUrl}/api/contact-us`
 };

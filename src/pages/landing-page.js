@@ -4,6 +4,8 @@ import { HeaderComponent } from "../components/header-component"
 import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+localStorage.clear();
+
 const theme = createTheme({
   status: {
     danger: '#e53e3e',

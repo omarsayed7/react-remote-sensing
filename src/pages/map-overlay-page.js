@@ -6,6 +6,7 @@ import { fetchArchiveImage, fetchSegmentationMask, fetchUploadSegmentationMask }
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import { Navigate } from 'react-router-dom'
 
 
 const ModalStyle = {
@@ -44,7 +45,7 @@ export class MapOverlayPage extends Component {
             open: false,
             maskImage: '',
             modalTitle: '',
-            modalDescription : [],
+            modalDescription: [],
             col_matrix: '',
             bounds: []
         }
@@ -89,17 +90,19 @@ export class MapOverlayPage extends Component {
     stringSplitter = (desc) => {
         return (
             desc.map((i, key) => {
-                
+
                 return (<Typography key={key}>{i}</Typography>);
             }))
     }
-
     render() {
         const bBox = localStorage.getItem('Bbox').split("[")[1].split(']')[0].split(',')
 
         const BboxBounds = [[parseFloat(bBox[1]), parseFloat(bBox[0])], [parseFloat(bBox[3]), parseFloat(bBox[2])]]
         console.log(this.state, BboxBounds, "STATE")
         console.log(this.state.maskImage, "URL")
+        if (!localStorage.getItem('isLogged')) {
+            return <Navigate to={"/"} />
+        }
         return (
             <div>
                 <Modal
@@ -130,7 +133,7 @@ export class MapOverlayPage extends Component {
                 </MapContainer>
 
 
-                <Button variant = "outlined" onClick={() => this.handleOpen(this.state.modalTitle, this.state.modalDescription)} style={{ color: "grey" }}>Show Correlation Matrix</Button>
+                <Button variant="outlined" onClick={() => this.handleOpen(this.state.modalTitle, this.state.modalDescription)} style={{ color: "grey" }}>Show Correlation Matrix</Button>
             </div>
         );
     }

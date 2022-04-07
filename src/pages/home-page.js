@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
+import { Navigate } from 'react-router-dom'
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
@@ -92,7 +93,9 @@ const ModalStyle = {
     boxShadow: 24,
     p: 4,
 };
+
 export const HomePage = (props) => {
+
     let bbox = localStorage.getItem('Bbox')
     //Handling Modal View
     const [open, setOpen] = useState(false);
@@ -270,6 +273,9 @@ export const HomePage = (props) => {
 
                 return (<Typography key={key}>{i}</Typography>);
             }))
+    }
+    if (!localStorage.getItem('isLogged')) {
+        return <Navigate to={"/"} />
     }
     return (
         <Grid container spacing={1} sx={{ backgroundColor: 'white', display: 'felx', flexDirection: 'row' }}>

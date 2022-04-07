@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -6,7 +7,8 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { HeaderComponent } from "../components/header-component"
-import { signUpService } from "../services"
+import { signUpService } from "../services";
+
 const theme = createTheme({
     status: {
         danger: '#e53e3e',
@@ -42,6 +44,8 @@ export const SignUpPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [repassword, setRePassword] = useState('');
+    const [isSignUp, setIsSignUp] = useState(false);
+
     //Handling Modal View
     const [open, setOpen] = useState(false);
     const handleOpen = () => {
@@ -77,9 +81,13 @@ export const SignUpPage = () => {
             "Password": password
         }
         const signUpResponse = await signUpService(signUpData);
-
+        if (signUpResponse.message === "Created!") {
+            setIsSignUp(true)
+        }
     }
-
+    if (isSignUp) {
+        return <Navigate to={"/sign-in-page"} />
+    }
     return (
 
         <div>

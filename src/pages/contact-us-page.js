@@ -43,7 +43,7 @@ export const ContactUsPage = () => {
             "FirstName": firstName,
             "LastName": lastName,
             "Email": email,
-            "Message": helpMessage
+            "Description": helpMessage
         }
         const contactUsResponse = await contactUsService(contactUsData);
     }
@@ -54,9 +54,9 @@ export const ContactUsPage = () => {
             <div style={{ display: 'flex', flexDirection: 'row', padding: 120 }}>
                 <div style={{ width: '50%', height: '50%', backgroundColor: 'white' }}>
                     <h1 style={{ color: 'blue' }}>Contact us</h1>
-                    <h7 >Need to get in touch
+                    <h5 >Need to get in touch
                         with us? Either fill out the form with inquire
-                        or find Department email you would like to contact below</h7>
+                        or find Department email you would like to contact below</h5>
                 </div>
                 <div style={{ backgroundColor: 'white', paddingLeft: "20vh" }}>
                     <div style={{ display: 'flex', flexDirection: 'row', alignContent: 'space-between' }}>

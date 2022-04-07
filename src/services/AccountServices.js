@@ -3,7 +3,7 @@ import { makeRequest } from "../util";
 
 export async function signInService(signin_data) {
     console.log(signin_data)
-    const res = await makeRequest(`${API.SEGMENTATION_API_URL}`, {
+    const res = await makeRequest(`${API.SIGN_IN}`, {
         method: "POST",
         body: JSON.stringify(signin_data),
         headers: {

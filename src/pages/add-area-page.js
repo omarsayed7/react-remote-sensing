@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { DrawMapComponent } from "../components/draw-map-component"
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
+import { Navigate } from 'react-router-dom'
+
 
 export const AddAreaPage = () => {
     const [bbox, setbbox] = useState();
@@ -16,9 +18,12 @@ export const AddAreaPage = () => {
         localStorage.setItem("Bbox", JSON.stringify(event));
         console.log(localStorage.getItem('Bbox'))
     };
+    if (!localStorage.getItem('isLogged')) {
+        return <Navigate to={"/"} />
+    }
     return (
         <Container>
-            <Link to='/' state={{ Bbbox: bbox }}>
+            <Link to='/home' state={{ Bbbox: bbox }}>
                 <Button variant="outlined">
                     Save
                 </Button>

@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { HeaderComponent } from "../components/header-component"
 import { signInService } from "../services";
-
+import { Navigate } from "react-router-dom";
 const theme = createTheme({
     status: {
         danger: '#e53e3e',
@@ -24,7 +24,7 @@ const theme = createTheme({
 export const SignInPage = () => {
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
-
+    const [islogged, setIsLogged] = useState(false)
     const onChangeUserName = (text) => {
         setUserName(text.target.value)
     }
@@ -36,10 +36,20 @@ export const SignInPage = () => {
             "Username": username,
             "Password": password
         }
+        console.log(signInData, "info")
         const signInResponse = await signInService(signInData);
+        console.log(signInResponse)
+        if (signInResponse.message === 'LoggedIn') {
+            console.log("hello")
+            localStorage.setItem("isLogged", true)
+            setIsLogged(true)
+        }
     }
-
-
+    if (localStorage.getItem('isLogged')) {
+        console.log("logggg")
+        console.log(localStorage.getItem('isLogged'))
+        return <Navigate to={"/home"} />
+    }
     return (
         <div >
             <HeaderComponent showBackButton={true} islogged={false} iscontacted={false} isabout={false} backgroundColor={'blue'} textColor={'white'} />
