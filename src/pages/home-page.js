@@ -280,7 +280,7 @@ export const HomePage = (props) => {
     return (
         <Grid container spacing={1} sx={{ backgroundColor: 'white', display: 'felx', flexDirection: 'row' }}>
             <div style={{ width: '100%', flex: 1, flexDirection: "column", display: "flex" }}>
-                <HeaderComponent islogged={true} backgroundColor={'blue'} iscontacted={true} isabout={true} textColor={'white'} />
+                <HeaderComponent islogged={false} backgroundColor={'blue'} iscontacted={false} isabout={false} textColor={'white'} />
             </div>
             <div>
                 <Modal
@@ -297,7 +297,7 @@ export const HomePage = (props) => {
                     </Box>
                 </Modal>
             </div>
-            <Grid item md={4} sx={{ backgroundColor: 'blue', height: '91.1vh' }}>
+            <Grid item md={8} sx={{ backgroundColor: 'blue', height: '91.1vh' }}>
                 <div style={{ display: 'felx', flexDirection: 'row' }}>
                     <Button style={{ fontWeight: 'bold', color: "white", marginRight: "5" }}
                         endIcon={<ArrowForwardIosIcon
@@ -326,7 +326,7 @@ export const HomePage = (props) => {
                     </Button>
                 </div>
             </Grid>
-            <Grid container spacing={1.6} paddingTop={6} paddingLeft={2} style={{ backgroundColor: 'white', height: "91.1vh", width: "80.29%", position: 'absolute', top: 78, left: 308 }}>
+            <Grid container spacing={1.6} paddingTop={6} paddingLeft={2} style={{ backgroundColor: 'white', height: "91.1vh", width: "80.29%", position: 'absolute', top: 77, left: 308 }}>
                 <Grid item xs={6} md={2.5} sx={{ flex: 1, flexDirection: "column", display: "flex" }}>
                     <Item style={{ marginBottom: 10, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
                         <p>1. Data Source</p>

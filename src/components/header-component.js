@@ -5,12 +5,13 @@ export const HeaderComponent = (props) => {
 
     return (
         <div style={{ display: 'flex', backgroundColor: props.backgroundColor, height: '10vh', alignItems: 'center' }}>
-            {props.showBackButton ?
+            {(props.showBackButton & !props.islogged) ?
                 <Button style={{ color: "white" }}
                     startIcon={<ArrowBackIcon fontSize="large" />}
-                    href="/">
+                    href="/home">
                 </Button>
                 : null}
+
             <h4 style={{ paddingLeft: '4vh', paddingRight: '100vh', fontWeight: 'bold', color: props.textColor }}>AI Remote Sensing</h4>
             {props.islogged ?
                 <div>
