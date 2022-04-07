@@ -3,6 +3,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { HeaderComponent } from "../components/header-component"
+import { Contact_Us } from "../services/ContactService";
 
 const theme = createTheme({
     status: {
@@ -25,6 +26,13 @@ export const ContactUsPage = () => {
     const [email, setEmail] = useState("");
     const [helpMessage, setHelpMessage] = useState("");
 
+    const contactUsData = {
+        "FirstName": firstName,
+        "LastName": lastName,
+        "Email": email,
+        "Message": helpMessage
+    }
+
     const onChangeFirstName = (text) => {
         setFirstName(text.target.value)
     }
@@ -36,6 +44,9 @@ export const ContactUsPage = () => {
     }
     const onChangeHelpMessage = (text) => {
         setHelpMessage(text.target.value)
+    }
+    const onSubmit = () => {
+        const contactUsResponse = await Contact_Us(contactUsData);
     }
 
     return (
@@ -91,7 +102,7 @@ export const ContactUsPage = () => {
                     </div>
                     <div style={{ display: 'flex', marginTop: '35%' }}>
                         <ThemeProvider theme={theme}>
-                            <Button variant="outlined" color="primary" style={{ fontWeight: "bold", borderWidth: 3, borderRadius: 20 }}>
+                            <Button onClick={onSubmit}variant="outlined" color="primary" style={{ fontWeight: "bold", borderWidth: 3, borderRadius: 20 }}>
                                 Submit
                             </Button>
                         </ThemeProvider>

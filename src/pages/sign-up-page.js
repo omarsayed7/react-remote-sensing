@@ -49,7 +49,13 @@ export const SignUpPage = () => {
     };
     const handleClose = () => setOpen(false);
 
-
+    const signUpData = {
+        "FirstName": firstName,
+        "LastName": lastName,
+        "Username": username,
+        "Email": email,
+        "Password": password
+    }
     const onChangeFirstName = (text) => {
         setFirstName(text.target.value)
     }
@@ -68,12 +74,9 @@ export const SignUpPage = () => {
     const onChangeRePassword = (text) => {
         setRePassword(text.target.value)
     }
-    const passCheck = () => {
-        console.log(password, "password")
-        console.log(repassword, "repassword")
-        if (password !== repassword || password === repassword === '') {
-            console.log("Passwords don't match")
-        }
+    const onSubmit = () => {
+        const signUpResponse = await Sign_Up(signUpData);
+
     }
 
     return (
@@ -157,7 +160,7 @@ export const SignUpPage = () => {
                         </div>
                         <div style={{ display: 'flex', marginTop: '15%', marginLeft: '33%' }}>
                             <ThemeProvider theme={theme}>
-                                <Button onClick={passCheck} variant="outlined" color="primary" style={{ fontWeight: "bold", borderWidth: 3, borderRadius: 20 }}>
+                                <Button onClick={onSubmit} variant="outlined" color="primary" style={{ fontWeight: "bold", borderWidth: 3, borderRadius: 20 }}>
                                     Sign-up
                                 </Button>
                             </ThemeProvider>

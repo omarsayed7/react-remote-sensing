@@ -3,6 +3,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { HeaderComponent } from "../components/header-component"
+import { Sign_Up } from "../services/AccountServices";
 
 const theme = createTheme({
     status: {
@@ -19,6 +20,10 @@ const theme = createTheme({
         },
     },
 });
+const signInData = {
+    "Username": username,
+    "Password": password
+}
 export const SignInPage = () => {
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
@@ -29,6 +34,11 @@ export const SignInPage = () => {
     const onChangePassword = (text) => {
         setPassword(text.target.value)
     }
+    const onSubmit = () => {
+        const signInResponse = await Sign_In(signInData);
+    }
+
+    
     return (
         <div >
             <HeaderComponent showBackButton={true} islogged={false} iscontacted={false} isabout={false} backgroundColor={'blue'} textColor={'white'} />
@@ -58,7 +68,7 @@ export const SignInPage = () => {
                     </div>
                     <div style={{ display: 'flex', marginTop: '30%' }}>
                         <ThemeProvider theme={theme}>
-                            <Button variant="outlined" color="primary" style={{ fontWeight: "bold", borderWidth: 3, borderRadius: 20 }}>
+                            <Button onClick={onSubmit} variant="outlined" color="primary" style={{ fontWeight: "bold", borderWidth: 3, borderRadius: 20 }}>
                                 Sign-In
                             </Button>
                         </ThemeProvider>
