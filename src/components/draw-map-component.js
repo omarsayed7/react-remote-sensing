@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MapContainer, TileLayer, FeatureGroup } from 'react-leaflet';
+import { MapContainer, TileLayer, FeatureGroup, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import EditControl from './editControl'
 // work around broken icons when using webpack, see https://github.com/PaulLeCam/react-leaflet/issues/255
@@ -121,6 +121,15 @@ export class DrawMapComponent extends Component {
                         }}
                     />
                 </FeatureGroup>
+                {
+                    (this.props.showMarker) ?
+
+                        (<Marker position={this.props.position}>
+                            <Popup>
+                                This point has lat: {this.props.position[0]} and lang: {this.props.position[1]}
+                            </Popup>
+                        </Marker>) : null
+                }
             </MapContainer>
         );
     }
