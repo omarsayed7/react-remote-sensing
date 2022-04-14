@@ -45,6 +45,9 @@ export const SignInPage = () => {
             setIsLogged(true)
         }
     }
+    const test = () => {
+        localStorage.setItem("isLogged", true)
+    }
     if (localStorage.getItem('isLogged')) {
         console.log("logggg")
         console.log(localStorage.getItem('isLogged'))

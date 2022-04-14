@@ -89,7 +89,7 @@ export class DrawMapComponent extends Component {
 
     render() {
         return (
-            <MapContainer center={[37.8189, -122.4786]} zoom={13} zoomControl={false} style={{ height: "90vh" }} >
+            <MapContainer center={this.props.position} zoom={13} zoomControl={false} style={{ height: "90vh" }} >
                 <TileLayer
                     // attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     // url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
