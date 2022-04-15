@@ -83,7 +83,7 @@ export const SignInPage = () => {
                     </div>
                     <div style={{ display: 'flex', marginTop: '30%' }}>
                         <ThemeProvider theme={theme}>
-                            <Button onClick={onSubmit} variant="outlined" color="primary" style={{ fontWeight: "bold", borderWidth: 3, borderRadius: 20 }}>
+                            <Button onClick={test} variant="outlined" color="primary" style={{ fontWeight: "bold", borderWidth: 3, borderRadius: 20 }}>
                                 Sign-In
                             </Button>
                         </ThemeProvider>

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { MapContainer, TileLayer, FeatureGroup, Marker, Popup } from 'react-leaflet';
+import React, { useRef } from 'react';
+import { MapContainer, TileLayer, FeatureGroup, Marker, Popup, useMapEvent } from 'react-leaflet';
 import L from 'leaflet';
 import EditControl from './editControl'
 // work around broken icons when using webpack, see https://github.com/PaulLeCam/react-leaflet/issues/255
@@ -15,26 +15,33 @@ L.Icon.Default.mergeOptions({
 });
 
 //
+const SetViewOnClick = ({ animateRef }) => {
+    const map = useMapEvent('click', (e) => {
+        map.setView(e.latlng, map.getZoom(), {
+            animate: animateRef.current || false,
+        })
+    })
 
-export class DrawMapComponent extends Component {
+    return null
+}
+
+export const DrawMapComponent = (props) => {
+    const animateRef = useRef(false)
     // see http://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html#l-draw-event for leaflet-draw events doc
 
-    constructor(props) {
-        super(props);
-        this.myRef = React.createRef();
-    }
-    _onEdited = (e) => {
+    //this.myRef = React.createRef();
+    const _onEdited = (e) => {
         let numEdited = 0;
         e.layers.eachLayer((layer) => {
             numEdited += 1;
         });
         console.log(`_onEdited: edited ${numEdited} layers`, e);
 
-        this._onChange();
+        _onChange(props);
 
     };
     //zoom 13 68 16 476 11 17
-    _onCreated = (e) => {
+    const _onCreated = (e) => {
         let type = e.layerType;
         let layer = e.layer;
         var newHeight = (layer._rawPxBounds.max.y - layer._rawPxBounds.min.y);
@@ -45,7 +52,7 @@ export class DrawMapComponent extends Component {
         let minPoint = layer._latlngs[0][0]
         let maxPoint = layer._latlngs[0][2]
         let outputBbox = [minPoint.lng, minPoint.lat, maxPoint.lng, maxPoint.lat]
-        this.props.handleBbox(outputBbox)
+        props.handleBbox(outputBbox)
         if (type === 'marker') {
             // Do marker specific actions
             console.log('_onCreated: marker created', e);
@@ -57,114 +64,114 @@ export class DrawMapComponent extends Component {
         console.log("AREAAA", seeArea)
     };
 
-    _onDeleted = (e) => {
+    const _onDeleted = (e) => {
         let numDeleted = 0;
         e.layers.eachLayer((layer) => {
             numDeleted += 1;
         });
         console.log(`onDeleted: removed ${numDeleted} layers`, e);
 
-        this._onChange();
+        _onChange(props);
     };
 
-    _onMounted = (drawControl) => {
+    const _onMounted = (drawControl) => {
         console.log('_onMounted', drawControl);
     };
 
-    _onEditStart = (e) => {
+    const _onEditStart = (e) => {
         console.log('_onEditStart', e);
     };
 
-    _onEditStop = (e) => {
+    const _onEditStop = (e) => {
         console.log('_onEditStop', e);
     };
 
-    _onDeleteStart = (e) => {
+    const _onDeleteStart = (e) => {
         console.log('_onDeleteStart', e);
     };
 
-    _onDeleteStop = (e) => {
+    const _onDeleteStop = (e) => {
         console.log('_onDeleteStop', e);
     };
 
-    render() {
-        return (
-            <MapContainer center={this.props.position} zoom={13} zoomControl={false} style={{ height: "90vh" }} >
-                <TileLayer
-                    // attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                    // url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-                    url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-                    attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-                />
-                <FeatureGroup
-                // ref={(reactFGref) => {
-                //     this._onFeatureGroupReady(reactFGref);
-                // }}
-                >
-                    <EditControl
-                        position="topright"
-                        onEdited={this._onEdited}
-                        onCreated={this._onCreated}
-                        onDeleted={this._onDeleted}
-                        onMounted={this._onMounted}
-                        onEditStart={this._onEditStart}
-                        onEditStop={this._onEditStop}
-                        onDeleteStart={this._onDeleteStart}
-                        onDeleteStop={this._onDeleteStop}
-                        draw={{
-                            rectangle: true,
-                            circle: false,
-                            polygon: false,
-                            polyline: false,
-                            circlemarker: false,
-                            marker: false,
-                        }}
-                    />
-                </FeatureGroup>
-                {
-                    (this.props.showMarker) ?
 
-                        (<Marker position={this.props.position}>
-                            <Popup>
-                                This point has lat: {this.props.position[0]} and lang: {this.props.position[1]}
-                            </Popup>
-                        </Marker>) : null
-                }
-            </MapContainer>
-        );
+    return (
+        <MapContainer center={props.position} zoom={13} zoomControl={false} style={{ height: "90vh" }} >
+            <TileLayer
+                // attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                // url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+                url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+            />
+            <FeatureGroup
+            // ref={(reactFGref) => {
+            //     this._onFeatureGroupReady(reactFGref);
+            // }}
+            >
+                <EditControl
+                    position="topright"
+                    onEdited={_onEdited}
+                    onCreated={_onCreated}
+                    onDeleted={_onDeleted}
+                    onMounted={_onMounted}
+                    onEditStart={_onEditStart}
+                    onEditStop={_onEditStop}
+                    onDeleteStart={_onDeleteStart}
+                    onDeleteStop={_onDeleteStop}
+                    draw={{
+                        rectangle: true,
+                        circle: false,
+                        polygon: false,
+                        polyline: false,
+                        circlemarker: false,
+                        marker: false,
+                    }}
+                />
+            </FeatureGroup>
+            {
+                (props.showMarker) ?
+
+                    (<Marker position={props.position}>
+                        <Popup>
+                            This point has lat: {props.position[0]} and lang: {props.position[1]}
+                        </Popup>
+                    </Marker>) : null
+            }
+            <SetViewOnClick animateRef={animateRef} />
+        </MapContainer>
+    );
+}
+
+const _editableFG = null;
+
+const _onFeatureGroupReady = (reactFGref) => {
+    // populate the leaflet FeatureGroup with the geoJson layers
+
+    let leafletGeoJSON = new L.GeoJSON(getGeoJson());
+    let leafletFG = reactFGref;
+
+    leafletGeoJSON.eachLayer((layer) => {
+        leafletFG.addLayer(layer);
+
+    });
+
+    // store the ref for future access to content
+
+    _editableFG = reactFGref;
+};
+
+const _onChange = (props) => {
+    // this._editableFG contains the edited geometry, which can be manipulated through the leaflet API
+
+    const { onChange } = props;
+
+    if (!_editableFG || !onChange) {
+        return;
     }
 
-    _editableFG = null;
-
-    _onFeatureGroupReady = (reactFGref) => {
-        // populate the leaflet FeatureGroup with the geoJson layers
-
-        let leafletGeoJSON = new L.GeoJSON(getGeoJson());
-        let leafletFG = reactFGref;
-
-        leafletGeoJSON.eachLayer((layer) => {
-            leafletFG.addLayer(layer);
-
-        });
-
-        // store the ref for future access to content
-
-        this._editableFG = reactFGref;
-    };
-
-    _onChange = () => {
-        // this._editableFG contains the edited geometry, which can be manipulated through the leaflet API
-
-        const { onChange } = this.props;
-
-        if (!this._editableFG || !onChange) {
-            return;
-        }
-
-        const geojsonData = this._editableFG.toGeoJSON();
-        onChange(geojsonData);
-    };
-}
+    const geojsonData = _editableFG.toGeoJSON();
+    onChange(geojsonData);
+};
 
 // data taken from the example in https://github.com/PaulLeCam/react-leaflet/issues/176
 

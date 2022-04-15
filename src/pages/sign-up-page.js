@@ -149,8 +149,6 @@ export const SignUpPage = () => {
                         </div>
                         <div style={{ display: 'flex', marginTop: '15%', width: "90%", height: 10 }}>
                             <TextField
-                                multiline
-                                rows={1}
                                 variant="outlined"
                                 onChange={onChangePassword}
                                 value={password}
