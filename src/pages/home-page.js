@@ -280,7 +280,7 @@ export const HomePage = (props) => {
     return (
         <Grid container spacing={1} sx={{ backgroundColor: 'white', display: 'felx', flexDirection: 'row' }}>
             <div style={{ width: '100%', flex: 1, flexDirection: "column", display: "flex" }}>
-                <HeaderComponent islogged={false} backgroundColor={'blue'} iscontacted={false} isabout={false} textColor={'white'} />
+                <HeaderComponent islogged={false} backgroundColor={'blue'} iscontacted={true} isabout={true} textColor={'white'} />
             </div>
             <div>
                 <Modal

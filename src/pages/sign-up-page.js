@@ -156,6 +156,7 @@ export const SignUpPage = () => {
                                 value={password}
                                 style={{ width: "100%" }}
                                 label={"Enter Your Password"}
+                                type={"password"}
                             />
                         </div>
                         <div style={{ display: 'flex', marginTop: '15%', width: "90%", height: 10 }}>
@@ -165,6 +166,7 @@ export const SignUpPage = () => {
                                 value={repassword}
                                 style={{ width: "100%" }}
                                 label={"Re-enter The Password"}
+                                type={"password"}
                             />
                         </div>
                         <div style={{ display: 'flex', marginTop: '15%', marginLeft: '33%' }}>

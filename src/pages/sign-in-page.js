@@ -78,6 +78,7 @@ export const SignInPage = () => {
                             value={password}
                             style={{ width: "100%" }}
                             label={"Password"}
+                            type={"password"}
                         />
                     </div>
                     <div style={{ display: 'flex', marginTop: '30%' }}>

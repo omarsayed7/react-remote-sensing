@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { Navigate } from 'react-router-dom'
+import { HeaderComponent } from '../components';
 
 
 const ModalStyle = {
@@ -118,6 +119,7 @@ export class MapOverlayPage extends Component {
                         {this.stringSplitter(this.state.modalDescription)}
                     </Box>
                 </Modal>
+                <HeaderComponent islogged={false} backgroundColor={'blue'} iscontacted={true} isabout={true} textColor={'white'} />
                 <MapContainer center={[parseFloat(bBox[1]), parseFloat(bBox[0])]} zoom={13} zoomControl={false} style={{ height: "90vh" }} >
                     <TileLayer
                         // attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

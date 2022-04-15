@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
-import { DrawMapComponent } from "../components/draw-map-component"
+import { DrawMapComponent, HeaderComponent } from "../components"
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import { Navigate } from 'react-router-dom'
@@ -41,7 +41,8 @@ export const AddAreaPage = () => {
         return <Navigate to={"/"} />
     }
     return (
-        <Container>
+        <Container style={{ width: '100%', flex: 1, flexDirection: "column", display: "flex" }}>
+            <HeaderComponent islogged={false} backgroundColor={'blue'} iscontacted={true} isabout={true} textColor={'white'} />
             <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", margin: 16 }}>
 
                 <Link to='/home' state={{ Bbbox: bbox }} style={{ alignItems: "center" }}>
