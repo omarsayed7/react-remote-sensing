@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { MapContainer, TileLayer, FeatureGroup, Marker, Popup, useMapEvent } from 'react-leaflet';
+import React, { useRef, useEffect, useState } from 'react';
+import { MapContainer, TileLayer, FeatureGroup, Marker, Popup, useMapEvent, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import EditControl from './editControl'
 // work around broken icons when using webpack, see https://github.com/PaulLeCam/react-leaflet/issues/255
@@ -14,21 +14,28 @@ L.Icon.Default.mergeOptions({
         'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0/images/marker-shadow.png',
 });
 
-//
-const SetViewOnClick = ({ animateRef }) => {
-    const map = useMapEvent('click', (e) => {
-        map.setView(e.latlng, map.getZoom(), {
-            animate: animateRef.current || false,
-        })
+const LocationMarker = ({ pos, showMarker }) => {
+    const [position, setPosition] = useState(null)
+    const map = useMapEvents({
+        mousemove() {
+            if (pos != position) {
+                setPosition(pos)
+                map.flyTo(pos, map.getZoom())
+            }
+        },
     })
 
-    return null
+    return (position === null || !showMarker) ? null : (
+        <Marker position={position}>
+            <Popup>
+                This point has lat: {pos[0]} and lang: {pos[1]}
+            </Popup>
+        </Marker>
+    )
 }
 
 export const DrawMapComponent = (props) => {
-    const animateRef = useRef(false)
     // see http://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html#l-draw-event for leaflet-draw events doc
-
     //this.myRef = React.createRef();
     const _onEdited = (e) => {
         let numEdited = 0;
@@ -96,13 +103,17 @@ export const DrawMapComponent = (props) => {
 
 
     return (
-        <MapContainer center={props.position} zoom={13} zoomControl={false} style={{ height: "90vh" }} >
+        <MapContainer
+            center={props.position}
+            zoom={13} zoomControl={false}
+            style={{ height: "90vh" }} >
             <TileLayer
                 // attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 // url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
                 url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
                 attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
             />
+            <LocationMarker pos={props.position} showMarker={props.showMarker} />
             <FeatureGroup
             // ref={(reactFGref) => {
             //     this._onFeatureGroupReady(reactFGref);
@@ -128,16 +139,6 @@ export const DrawMapComponent = (props) => {
                     }}
                 />
             </FeatureGroup>
-            {
-                (props.showMarker) ?
-
-                    (<Marker position={props.position}>
-                        <Popup>
-                            This point has lat: {props.position[0]} and lang: {props.position[1]}
-                        </Popup>
-                    </Marker>) : null
-            }
-            <SetViewOnClick animateRef={animateRef} />
         </MapContainer>
     );
 }

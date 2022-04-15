@@ -41,12 +41,12 @@ export const AddAreaPage = () => {
         return <Navigate to={"/"} />
     }
     return (
-        <Container style={{ width: '100%', flex: 1, flexDirection: "column", display: "flex" }}>
+        <div style={{ width: '100%', flexDirection: "column", display: "flex" }}>
             <HeaderComponent islogged={false} backgroundColor={'blue'} iscontacted={true} isabout={true} textColor={'white'} />
             <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", margin: 16 }}>
 
-                <Link to='/home' state={{ Bbbox: bbox }} style={{ alignItems: "center" }}>
-                    <Button variant="outlined">
+                <Link to='/home' state={{ Bbbox: bbox }} style={{ alignItems: "center", marginLeft: 20, alignSelf: "center" }}>
+                    <Button variant="contained" size="large">
                         Save
                     </Button>
                 </Link>
@@ -80,7 +80,7 @@ export const AddAreaPage = () => {
                         id="langitude"
                         size="small"
                     />
-                    <Button variant="outlined" onClick={onSearch} >
+                    <Button variant="outlined" onClick={onSearch} size="small" >
                         Search
                     </Button>
                 </div>
@@ -91,6 +91,6 @@ export const AddAreaPage = () => {
                 showMarker={showMarker}
             />
 
-        </Container>
+        </div>
     )
 } 
